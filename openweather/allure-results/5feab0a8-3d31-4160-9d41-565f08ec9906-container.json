@@ -1,0 +1,1 @@
+{"uuid":"5feab0a8-3d31-4160-9d41-565f08ec9906","name":"Internet Explorer Test","children":["93e0bc08-8bfd-4cbc-b960-f43190cb5762"],"befores":[{"name":"setBrowser","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1614880639616,"stop":1614880639630}],"afters":[],"links":[],"start":1614880639589,"stop":1614903946839}

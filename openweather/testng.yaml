@@ -1,0 +1,17 @@
+name: Search Weather
+threadCount: 2
+parallel: tests
+configFailurePolicy: skip
+tests:
+  - name: Chrome Test
+  parallel: tests
+  parameters: { browser: CHROME }
+  classes:
+    - searchweather.SearchCurrentWeather
+
+  - name: Internet Explorer Test
+  parallel: tests
+  parameters: { browser: DEFAULT }
+  classes:
+    - searchweather.SearchCurrentWeather
+
