@@ -1,12 +1,12 @@
 package pages;
 
 import java.util.List;
-
 import javax.annotation.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WebDriver.Options;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.Keys;
 
 public class FindWeatherPage {
@@ -27,6 +27,8 @@ public class FindWeatherPage {
 	private By notFoundText = By.xpath("//div[@id=\"forecast_list_ul\"]/div[text()=\"Not found\"]");
 	private By searchWeatherTableRow = By.xpath("//div[@id=\"forecast_list_ul\"]/table/tbody/tr");
 	private By searchWeatherTableCol = By.xpath("//div[@id=\"forecast_list_ul\"]/table/tbody/tr[1]/td");
+	private By allowAllCookiesButton = By.className("stick-footer-panel__link");
+	private By owmLoader = By.className("owm-loader");
 	
 	 /**
 	   * Capture cityForecastWeatherLink for given city & country code
@@ -38,15 +40,52 @@ public class FindWeatherPage {
 		return By.xpath("//div[@id=\"forecast_list_ul\"]/table/tbody//a[contains(text(),'" + city + ", " + countrycode+ "')]");
 	}
 	
-	 /**
+	/**
+	   * Click on Allow All to allow all cookies
+	   * 
+	   */
+	public FindWeatherPage allowCookies() {
+	    waitForSpinner();
+	    new WebDriverWait(driver, 10)
+	        .until(ExpectedConditions.elementToBeClickable(allowAllCookiesButton))
+	        .click();
+	    return this;
+	  }
+
+	/**
+	   * Wait for owmLoader is disappear
+	   * 
+	   */
+	  public FindWeatherPage waitForSpinner() {
+	    new WebDriverWait(driver, 10)
+	        .until(ExpectedConditions.invisibilityOfElementLocated(owmLoader));
+
+	    return this;
+	  }
+
+	/**
+	   * Sleep in seconds
+	   * 
+	   * @param timeInSeconds
+	   */
+	  private void sleep(int timeInSeconds) {
+	    try {
+	      Thread.sleep(timeInSeconds * 1000);
+	    } catch (InterruptedException e) {
+	      // error handling
+	    }
+	  }
+	
+	
+	/**
 	   * Search weather in given city & country code
 	   * 
 	   * @param given city & country code for search
 	   */
-	public void searchWeather (String city,@Nullable String countrycode) throws InterruptedException  
+	public void searchWeather (String city,@Nullable String countrycode)  
 	{
 		this.enterCity(city,countrycode);
-		Thread.sleep(100);
+		this.sleep(1);
 		this.clickSearch();
 	}
 	

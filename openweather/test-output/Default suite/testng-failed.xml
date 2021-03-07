@@ -5,7 +5,7 @@
     <classes>
       <class name="searchweather.SearchCurrentWeather">
         <methods>
-          <include name="searchCurrentWeather" invocation-numbers="1 4 5 7"/>
+          <include name="searchCurrentWeather" invocation-numbers="1 2 3 4 5 6 7"/>
           <include name="quitDriver"/>
           <include name="setBrowser"/>
         </methods>

@@ -55,6 +55,7 @@ public class SearchForecastWeather {
   {
 	 FindWeatherPage openWeather = new FindWeatherPage(driver);
 	 WeatherForecastPage forecastWeather=new WeatherForecastPage(driver);
+	 openWeather.allowCookies();
 	 openWeather.searchWeather(Constant.city,null);
 	 openWeather.checkSearchWeather(Constant.city,"");
 	 openWeather.searchForecastWeather(Constant.city, Constant.countrycode1);

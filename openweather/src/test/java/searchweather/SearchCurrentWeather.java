@@ -78,6 +78,7 @@ public class SearchCurrentWeather {
 	public void searchCurrentWeather (String city, String countrycode) throws InterruptedException
 	{
 		FindWeatherPage openWeather = new FindWeatherPage(driver);
+		openWeather.allowCookies();
 		openWeather.searchWeather(city,countrycode);
 		assertEquals(openWeather.checkNotFoundReturn(),true, 
 			 "AUT bug!!! Not Found is not retured when searching weather in an invalid city: " + city + "," + countrycode);
