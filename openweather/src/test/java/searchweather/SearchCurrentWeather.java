@@ -15,28 +15,6 @@ import data.DriverType;
 import pages.FindWeatherPage;
 import data.Constant;
 
-/**
-* TC3 - Search weather in invalid cities (using Data Driven with Data Provider)
-* TO1		Verify that Not Found result is displayed
-* Step 1	Navigate to https://openweathermap.org/	
-* Step 2	"Enter city into Weather in your city text box
-* 			City 1: Londo"	
-* Step 3	Type Enter	
-* Step 4	Verify the returned result	==> Not Found result is displayed
-* Step 5	"Repeat step 2 to step 4 for the following data:
-* 			- City 2: Londo, US
-* 			- City 3: US
-* 			- City 4: UK, US,
-* 			- City 5: …
-* 			- City 6: ????
-* 			- City 7: ,,,,
-* 			- City 8: ****
-* 			- City 9: <blank>
-* 			- City 10: This city does not exist in the world! This city does not exist in the world! This city does not exist in the world! This city does not exist in the world!
-* 			- ....."	
-* 			Expected Result: Not Found result is displayed
-* Step 6	Close the web page
-*/
 public class SearchCurrentWeather {
 	DriverManager driverManager;
 	WebDriver driver;
@@ -65,7 +43,7 @@ public class SearchCurrentWeather {
 	* 			- City 2: Londo, US
 	* 			- City 3: US
 	* 			- City 4: UK, US,
-	* 			- City 5: …
+	* 			- City 5: ï¿½
 	* 			- City 6: ????
 	* 			- City 7: ,,,,
 	* 			- City 8: ****
