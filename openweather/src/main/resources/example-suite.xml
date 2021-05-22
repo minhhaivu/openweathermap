@@ -1,0 +1,8 @@
+<suite name="My-Suite">
+    <test name="chrome-test">
+        <parameter name="browserType" value=""/>
+        <classes>
+            <class name="test.TestClazz" />
+        </classes>
+    </test>
+</suite>
