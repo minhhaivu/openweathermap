@@ -2,3 +2,4 @@
 /.apt_generated_tests/
 /target/
 /allure-results/
+/test-output/
