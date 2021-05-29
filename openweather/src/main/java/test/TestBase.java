@@ -6,7 +6,7 @@ import org.testng.annotations.*;
 import pages.AbstractPage;
 
 public class TestBase {
-    private static String browserType;
+    private String browserType;
 
     @BeforeSuite
     public void executeBeforeSuite() {
