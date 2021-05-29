@@ -14,7 +14,8 @@ public class TestClazz extends TestBase {
         homePage.open().enterSearchTxt("iilymtics");
         SearchPage searchPage = getPageInstance(SearchPage.class);
         List<SearchPage.CityInfo> cites = searchPage.getSearchResult();
-        searchPage.checkSearchResult("assertEquals(openWeather.checkNotFoundReturn(),true, ");
+        searchPage.checkSearchResult("iilymtics");
+        searchPage.checkSearchResult("Not Found");
         System.out.println();
         searchPage.close();
 
