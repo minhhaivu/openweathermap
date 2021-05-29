@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class SearchPage extends AbstractPage {
         List<CityInfo> cities = getSearchResult();
         boolean searchResult=true;
         String msg="List of search city is returned";
+        SoftAssert softAssertion= new SoftAssert();
 
         if (searchCity != "Not Found" && cities.size() > 0) {
             for (CityInfo city : cities) {
@@ -58,7 +60,7 @@ public class SearchPage extends AbstractPage {
             searchResult = false;
             msg="Search result is the list of cities while expectation is Not Found";
         }
-        assertEquals(searchResult,true);
+        softAssertion.assertEquals(searchResult,true,msg);
 
     }
 
