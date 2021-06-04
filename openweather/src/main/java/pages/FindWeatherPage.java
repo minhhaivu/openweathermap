@@ -150,9 +150,9 @@ public class FindWeatherPage {
 	}
 	
 	/**
-	   * Get content/data (city & its detailed weather) of the returned table after searching weather in given city
+	   * Get content/backup.data (city & its detailed weather) of the returned table after searching weather in given city
 	   * 
-	   * @return Object [][] contains returned data
+	   * @return Object [][] contains returned backup.data
 	   */
 	public Object [][] getSearchWeatherData() 
 	{
@@ -173,7 +173,7 @@ public class FindWeatherPage {
 	}
 
 	/**
-	   * Check content/data (city & its detailed weather) of the returned table after searching weather in given city
+	   * Check content/backup.data (city & its detailed weather) of the returned table after searching weather in given city
 	   * 
 	   * @return boolean - True if returned city & country code == given city & country code. Otherwise, False
 	   */
