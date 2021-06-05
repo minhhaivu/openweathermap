@@ -40,30 +40,6 @@ public class SearchPage extends AbstractPage {
         return cities;
    }
 
-    public void checkSearchResult(String searchCity) {
-        List<CityInfo> cities = getSearchResult();
-        boolean searchResult=true;
-        String msg="List of search city is returned";
-        SoftAssert softAssertion= new SoftAssert();
-
-        if (searchCity != "Not Found" && cities.size() > 0) {
-            for (CityInfo city : cities) {
-                if (!city.getCityName().contains(searchCity)) {
-                    searchResult = false;
-                    msg="Search results do not contain city";
-                }
-            }
-        } else if (searchCity != "Not Found" && cities.size() == 0) {
-            searchResult = false;
-            msg="Search result is Not Found while expectation is list of cities";
-        } else if (searchCity == "Not Found" && cities.size() > 0) {
-            searchResult = false;
-            msg="Search result is the list of cities while expectation is Not Found";
-        }
-        softAssertion.assertEquals(searchResult,true,msg);
-
-    }
-
     private List<WebElement> getTableRows() {
         // TODO: handle both cases: has result and no result
         new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(forecastList));

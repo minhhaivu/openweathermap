@@ -17,10 +17,6 @@ public class HomePage extends AbstractPage {
     @FindBy(xpath = "//div[@id='desktop-menu']//input[@placeholder='Weather in your city']")
     private WebElement searchCityTxt;
 
-    @FindBy(xpath = "//div[@id='desktop-menu']//*[@type='submit']")
-    private WebElement submitBtn;
-
-
     public HomePage(WebDriver driver) {
         this.driver = driver;
     }
@@ -35,13 +31,11 @@ public class HomePage extends AbstractPage {
     public HomePage enterSearchTxt(String search) {
         searchCityTxt.clear();
         searchCityTxt.sendKeys(search);
-        searchCityTxt.sendKeys(Keys.ENTER);
-
         return this;
     }
 
     public void submitSearch() {
-        submitBtn.click();
+        searchCityTxt.sendKeys(Keys.ENTER);
     }
 
     private void waitForPageLoaded() {

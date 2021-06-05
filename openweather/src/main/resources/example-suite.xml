@@ -2,7 +2,12 @@
     <test name="chrome-test">
         <parameter name="browserType" value=""/>
         <classes>
-            <class name="test.TestClazz" />
+        </classes>
+    </test>
+
+    <test name="ff-test">
+        <parameter name="browserType" value="firefox"/>
+        <classes>
         </classes>
     </test>
 </suite>
