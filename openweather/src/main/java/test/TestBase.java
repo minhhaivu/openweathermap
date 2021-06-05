@@ -13,10 +13,6 @@ public class TestBase {
         setupTestSuite();
     }
 
-    protected <T extends AbstractPage> T getPageInstance(Class<T> clazz) {
-        return PageFactory.initElements(DriverGetter.getDriver(browserType), clazz);
-    }
-
     @Parameters("browserType")
     @BeforeTest
     public void executeBeforeTest(@Optional("chrome") String browserType) {
