@@ -1,1 +1,0 @@
-{"uuid":"5a8232ef-19d2-4920-99d6-86166ead501d","name":"FireFox Test","children":["580bf780-2c8f-4309-8068-549c3cfd2739"],"befores":[{"name":"setBrowser","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1615008118001,"stop":1615008135359}],"afters":[],"links":[],"start":1615008117985,"stop":1615008182004}

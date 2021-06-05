@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.Objects;
 
@@ -28,6 +30,8 @@ public class DriverGetter {
 
         switch (browserType) {
             case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver(initFirefoxOptions());
                 break;
             case "ie":
                 break;
@@ -44,6 +48,12 @@ public class DriverGetter {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("start-maximized");
 
+        return options;
+    }
+
+    private static FirefoxOptions initFirefoxOptions () {
+        FirefoxOptions options = new FirefoxOptions();
+        options.addPreference("geo.enabled", false);
         return options;
     }
 }

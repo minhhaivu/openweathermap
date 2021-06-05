@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -34,6 +35,7 @@ public class HomePage extends AbstractPage {
     public HomePage enterSearchTxt(String search) {
         searchCityTxt.clear();
         searchCityTxt.sendKeys(search);
+        searchCityTxt.sendKeys(Keys.ENTER);
 
         return this;
     }
