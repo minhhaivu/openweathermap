@@ -15,11 +15,12 @@ public class ResultCountTest extends TestBase {
         SearchTester tester = SearchTester.getInstance();
         List<SearchPage.CityInfo> cityInfoList = tester.searchAction.search(searchString);
         Validator.checkResultCount(cityInfoList.size(), expectedCount);
+        tester.searchAction.tearDown();
     }
 
     @DataProvider
     private Object[][] initTestData() {
-        return new Object[][] {
+        return new Object[][]{
                 {"keychron", 1},
                 {"Thanh pho Ho Chi Minh, VN", 1},
                 {"Ho Chi Minh, VN", 2}

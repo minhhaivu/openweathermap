@@ -8,12 +8,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.testng.Assert.assertEquals;
 
 public class SearchPage extends AbstractPage {
 
@@ -27,29 +24,32 @@ public class SearchPage extends AbstractPage {
         this.driver = driver;
     }
 
-    // TODO: use a common method to get row/cell text
-    public List<CityInfo>  getSearchResult() {
+    public List<CityInfo> getSearchResult() {
         List<CityInfo> cities = new ArrayList<>();
-            for (WebElement row : getTableRows()) {
-                String name = row.findElement(By.tagName("a")).getText();
-                String temperature =
-                        row.findElement(By.xpath("//span[@class='badge badge-info']")).getText();
-                cities.add(new CityInfo(name, temperature));
-            }
+        for (WebElement row : getTableRows()) {
+            String name = row.findElement(By.tagName("a")).getText();
+            String temperature =
+                    row.findElement(By.xpath("//span[@class='badge badge-info']")).getText();
+            cities.add(new CityInfo(name, temperature));
+        }
 
         return cities;
-   }
+    }
 
     private List<WebElement> getTableRows() {
-        // TODO: handle both cases: has result and no result
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(forecastList));
+        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(title));
         return forecastList.findElements(By.xpath("//tr"));
+    }
+
+    public List<WebElement> getNotFoundText (){
+        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(title));
+        return forecastList.findElements(By.xpath("//div[contains(text(),'Not found')]"));
     }
 
     @Getter
     @AllArgsConstructor
-    public class CityInfo {
-        private String cityName;
-        private String temperature;
+    public static class CityInfo {
+        private final String cityName;
+        private final String temperature;
     }
 }

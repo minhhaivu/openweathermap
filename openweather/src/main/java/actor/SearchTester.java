@@ -11,7 +11,7 @@ public class SearchTester {
 
     private static SearchTester instance;
 
-    public SearchAction searchAction = new SearchAction();
+    public final SearchAction searchAction = new SearchAction();
 
     public static SearchTester getInstance() {
         if (instance == null) {
