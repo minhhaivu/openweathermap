@@ -8,9 +8,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.concurrent.TimeUnit;
+
 public class HomePage extends AbstractPage {
     private static final String BASE_URL = "https://openweathermap.org/";
-    private static final long TIMEOUT_IN_SECONDS = 60;
+    private static final long TIMEOUT_IN_SECONDS = 90;
 
     @FindBy(xpath = "//h1/span[contains(text(), 'OpenWeather')]")
     private WebElement pageTitle;
@@ -36,6 +38,8 @@ public class HomePage extends AbstractPage {
     }
 
     public HomePage enterSearchTxt(String search) {
+        new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
+                .until(ExpectedConditions.elementToBeClickable(searchCityTxt));
         searchCityTxt.clear();
         searchCityTxt.sendKeys(search);
         return this;
@@ -45,16 +49,31 @@ public class HomePage extends AbstractPage {
         searchCityTxt.sendKeys(Keys.ENTER);
     }
 
-    public void selectMenu(String menu) {
+    public HomePage selectMenu(String menu) {
         new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
                 .until(ExpectedConditions.elementToBeClickable
                         (By.xpath("//a[contains(text(),'" + menu + "')]")));
         desktopMenu.findElement(By.xpath("//a[contains(text(),'" + menu + "')]")).click();
+
+        return this;
     }
 
     private void waitForPageLoaded() {
         WebDriverWait wait = new WebDriverWait(driver, TIMEOUT_IN_SECONDS);
         wait.until(ExpectedConditions.visibilityOf(pageTitle));
-        wait.until(ExpectedConditions.elementToBeClickable(searchCityTxt));
     }
+
+    public void switchToPage(String title) {
+        String currentPage = driver.getWindowHandle();
+        for (String windowHandle : driver.getWindowHandles()
+        ) {
+            if (!currentPage.equals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
+                if (driver.getTitle().contains(title)) {
+                    break;
+                }
+            }
+        }
+    }
+
 }
