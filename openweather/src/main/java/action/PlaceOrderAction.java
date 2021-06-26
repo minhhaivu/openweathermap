@@ -1,24 +1,24 @@
 package action;
 
-import pages.HomePage;
+import org.openqa.selenium.WebElement;
 import pages.MarketPlacePage;
 import pages.PlaceOrderPage;
 
+import java.util.List;
+
 public class PlaceOrderAction extends ActionBase {
-    private final HomePage homePage;
     private final MarketPlacePage marketPlacePage;
     private final PlaceOrderPage placeOrderPage;
 
     public PlaceOrderAction() {
 
         super();
-        homePage = getPageInstance(HomePage.class);
         marketPlacePage = getPageInstance(MarketPlacePage.class);
         placeOrderPage = getPageInstance(PlaceOrderPage.class);
     }
 
-    public PlaceOrderAction  openMarketPlace() {
-        homePage.open().selectMenu("Marketplace").switchToPage("Marketplace");
+    public PlaceOrderAction openMarketPlace() {
+        marketPlacePage.open();
 
         return this;
     }
@@ -29,26 +29,63 @@ public class PlaceOrderAction extends ActionBase {
         return this;
     }
 
-    public void addLocation(String searchStr, String searchBy) {
+    public PlaceOrderAction addLocation(String searchStr, String searchBy) {
         placeOrderPage.enterSearch(searchStr, searchBy).clickAddLocationButton();
 
+        return this;
     }
 
-    public void setTimePeriod(String fromYear, String fromMonth, String fromDate,
-                              String toYear, String toMonth, String toDate) {
+    public PlaceOrderAction setTimePeriod(String fromYear, String fromMonth, String fromDate,
+                                          String toYear, String toMonth, String toDate) {
         placeOrderPage.selectTimePeriod(fromYear, fromMonth, fromDate, toYear, toMonth, toDate);
 
+        return this;
     }
 
-    public void filter(String[] weatherPara, String unit,
-                       String[] formatFile) {
-        placeOrderPage.unselectWeatherParameter(weatherPara).selectUnit(unit)
+    public PlaceOrderAction filter(String[] weatherPara, String unit,
+                                   String[] formatFile, String downLoadOption) {
+        placeOrderPage
+                .unselectWeatherParameter(weatherPara)
+                .selectUnit(unit)
+                .selectFileFormat(formatFile)
+                .selectDownLoadOption(downLoadOption);
+
+        return this;
+    }
+
+    public void orderHistoricalWeatherDataByState(String state, String year) {
+        placeOrderPage.selectState(state).selectYear(year).
+                submitOrderPlace();
+
+    }
+
+    public PlaceOrderAction filter(String[] weatherPara, String unit,
+                                   String[] formatFile) {
+        placeOrderPage
+                .unselectWeatherParameter(weatherPara)
+                .selectUnit(unit)
                 .selectFileFormat(formatFile);
 
+        return this;
     }
 
     public void submitOrder() {
         placeOrderPage.submitOrderPlace();
+
+    }
+
+    public PlaceOrderPage.OrderDetail getOrderConfirmation() {
+
+        return placeOrderPage.getConfirmationOrderDetail();
+    }
+
+    public List<WebElement> getOrderTitle() {
+
+        return placeOrderPage.getOrderDetailTtl();
+    }
+
+    public void closeOrderDetails() {
+        placeOrderPage.closeOrderDetailsPopUp();
     }
 
     @Override
