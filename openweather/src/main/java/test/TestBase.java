@@ -21,7 +21,6 @@ public class TestBase {
         closeTestSuite();
     }
 
-
     protected void setupTestSuite() {
         // define later
     }

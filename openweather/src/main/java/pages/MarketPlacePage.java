@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MarketPlacePage extends AbstractPage {
     private static final String URL = "https://home.openweathermap.org/marketplace";
-    private static final long TIME_OUT_IN_SECONDS = 20;
+    private static final long TIME_OUT_IN_SECONDS = 40;
 
     @FindBy(xpath = "//div[@class='market-place']")
     private WebElement marketPlace;

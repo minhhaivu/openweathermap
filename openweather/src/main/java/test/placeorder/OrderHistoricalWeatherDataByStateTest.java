@@ -1,24 +1,22 @@
 package test.placeorder;
 
-import actor.PlaceOrderTester;
-import org.openqa.selenium.WebElement;
+import actor.Tester;
 import org.testng.annotations.Test;
+import pages.PlaceOrderPage;
 import test.TestBase;
-
-import java.util.List;
 
 public class OrderHistoricalWeatherDataByStateTest extends TestBase {
     @Test
     public void orderHistoricalWeather() {
-        String product = "Historical Weather Data by State";
-        String state = "Texas";
-        String year = "2018";
+        PlaceOrderPage.Product weatherProduct = new PlaceOrderPage.Product();
+        weatherProduct.setName("Historical Weather Data by State");
+        weatherProduct.setState("Texas");
+        weatherProduct.setYear("2018");
 
-        PlaceOrderTester tester = PlaceOrderTester.getInstance();
-        tester.placeOrderAction.openMarketPlace().selectProduct(product)
-                .orderHistoricalWeatherDataByState(state, year);
-        List<WebElement> orderTitle = tester.placeOrderAction.getOrderTitle();
-        Validator.checkOrderDetailPageDisplay(orderTitle);
-        tester.placeOrderAction.tearDown();
+        Tester tester = Tester.getInstance();
+        tester.placeOrderAction.openMarketPlace().orderProduct(weatherProduct);
+        boolean isDisplayed = tester.placeOrderAction.isOrderDetailConfirmationDisplayed();
+        PlaceOrderValidator.checkOrderDetailPageDisplay(isDisplayed);
+//        tester.placeOrderAction.tearDown();
     }
 }

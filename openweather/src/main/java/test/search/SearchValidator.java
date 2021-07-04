@@ -9,7 +9,7 @@ import pages.SearchPage;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Validator {
+public class SearchValidator {
 
     public static void checkResultCount(int actual, int expected) {
         Assert.assertEquals(actual, expected, "Result count is not correct");

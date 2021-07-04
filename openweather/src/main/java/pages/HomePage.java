@@ -6,6 +6,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import action.WaitForAction;
+
 public class HomePage extends AbstractPage {
     private static final String BASE_URL = "https://openweathermap.org/";
     private static final long TIMEOUT_IN_SECONDS = 30;
@@ -16,11 +18,10 @@ public class HomePage extends AbstractPage {
     @FindBy(xpath = "//div[@id='desktop-menu']//input[@placeholder='Weather in your city']")
     private WebElement searchCityTxt;
 
-    @FindBy(xpath = "//div[@class='owm-loader']")
-    private WebElement loadingSpinner;
-
     @FindBy(id = "desktop-menu")
     private WebElement desktopMenu;
+
+    private By loadingSpinner = By.xpath("//div[@class='owm-loader']");
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
@@ -45,18 +46,10 @@ public class HomePage extends AbstractPage {
         searchCityTxt.sendKeys(Keys.ENTER);
     }
 
-    public HomePage selectMenu(String menu) {
-        new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.elementToBeClickable
-                        (By.xpath("//a[contains(text(),'" + menu + "')]")));
-        desktopMenu.findElement(By.xpath("//a[contains(text(),'" + menu + "')]")).click();
-
-        return this;
-    }
 
     private void waitForPageLoaded() {
         ExpectedCondition<Boolean> spinnerPresence
-                = isPresent(By.xpath("//div[@class='owm-loader']"));
+                = WaitForAction.isElementPresent(loadingSpinner);
         new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
                 .until(ExpectedConditions.not(spinnerPresence));
     }

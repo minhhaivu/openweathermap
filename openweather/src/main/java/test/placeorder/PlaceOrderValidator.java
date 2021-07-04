@@ -9,7 +9,7 @@ import pages.PlaceOrderPage;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Validator {
+public class PlaceOrderValidator {
 
     public static void checkOrderDetail(PlaceOrderPage.OrderDetail expectedOrder,
                                         PlaceOrderPage.OrderDetail actualOrder) {
@@ -21,8 +21,8 @@ public class Validator {
         Assert.assertEquals(expectedOrder.getDownLoadOption(), actualOrder.getDownLoadOption());
     }
 
-    public static void checkOrderDetailPageDisplay(List<WebElement> orderDetailTlt) {
-        Assert.assertFalse(orderDetailTlt.isEmpty(),
+    public static void checkOrderDetailPageDisplay(boolean isDisplayed) {
+        Assert.assertTrue(isDisplayed,
                 "Order Detail Confirmation is not displayed!");
     }
 }

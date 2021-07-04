@@ -1,6 +1,6 @@
 package test.signin;
 
-import actor.SignInTester;
+import actor.Tester;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
@@ -11,10 +11,10 @@ public class ValidSignInTest {
     public void testInValidSignIn() {
         String userEmail = "minhhai.vu83@gmail.com";
         String password = "N0rm@l22";
-        SignInTester tester = SignInTester.getInstance();
+        Tester tester = Tester.getInstance();
         tester.signInAction.signIn(userEmail, password);
         List<WebElement> successMsg = tester.signInAction.getSuccessMsg();
-        Validator.checkSuccessSignInMessageDisplayed(successMsg);
+        SignInValidator.checkSuccessSignInMessageDisplayed(successMsg);
         tester.signInAction.tearDown();
 
     }

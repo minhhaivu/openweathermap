@@ -1,9 +1,8 @@
 package pages;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import action.WaitForAction;
+import element.*;
+import lombok.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -12,18 +11,16 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlaceOrderPage extends AbstractPage {
-    private static final long TIMEOUT_IN_SECONDS = 20;
-    private static final String PRE_TEXT_1 = "//td[contains(text(),'";
-    private static final String SUF_TEXT_1 = "')]";
-    private static final String PRE_TEXT_2 = "//label[contains(text(),'";
-    private static final String SUF_TEXT_2 = "')]/input";
-    private static final String SUF_TEXT_3 = "')]//span";
-    private static final String SUF_TEXT_4 = "')]//span[@class='icon-checked']";
+    private static final long TIMEOUT_IN_SECONDS = 30;
+    private static final String PRE_LABEL = "//label[contains(text(),'";
+    private static final String SUF_SPAN = "')]//span";
 
     @FindBy(id = "gmap")
     private WebElement gmap;
@@ -108,50 +105,57 @@ public class PlaceOrderPage extends AbstractPage {
         this.driver = driver;
     }
 
-    public PlaceOrderPage enterSearch(String searchStr, String searchBy) {
-        waitForPageLoaded();
-        searchTxt.click();
-        searchByPopUp.findElement(By.xpath("//button[text()='" + searchBy + "']")).click();
-        searchTxt.click();
-        searchTxt.sendKeys(searchStr);
-        sleep(2);
-        searchTxt.sendKeys(Keys.DOWN, Keys.RETURN);
+    public PlaceOrderPage addLocation(Location location) {
+        if (location != null) {
+            waitForPageLoaded();
+            searchTxt.click();
+            switch (location.searchBy) {
+                case "By location":
+                    searchByPopUp.findElement(Locator.buttonContainText(location.searchBy)).click();
+                    searchTxt.click();
+                    searchTxt.sendKeys(location.locationOrImportFile);
+                    WaitForAction.sleep(2);
+                    searchTxt.sendKeys(Keys.DOWN, Keys.RETURN);
+                    break;
+                case "import":
+                    //implement later
+                default:
+                    //implement later
+                    break;
+            }
+            new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
+                    .until(ExpectedConditions.visibilityOf(addLocationBtn));
+            addLocationBtn.click();
+        }
 
         return this;
     }
 
-    public PlaceOrderPage clickAddLocationButton() {
-        new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.visibilityOf(addLocationBtn));
-        addLocationBtn.click();
+    public PlaceOrderPage selectTimePeriod(Date fromDate, Date toDate) {
+        if (fromDate != null) {
+            fromDateInput.click();
+            Calendar calender = Calendar.getInstance();
+            calender.setTime(fromDate);
+            DateInput.selectYear(fromDateInput, calender.get(Calendar.YEAR));
+            DateInput.selectMonth(fromDateInput, calender.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+            DateInput.selectDate(fromDateInput, calender.get(Calendar.DATE));
+            toDateInput.click();
+            calender.setTime(toDate);
+            DateInput.selectYear(toDateInput, calender.get(Calendar.YEAR));
+            DateInput.selectMonth(toDateInput, calender.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+            toDateInput.findElement(By.xpath("//div[@class='to date-input']//td[contains(text(),"
+                    + Integer.toString(calender.get(Calendar.DATE)) + ")]")).click();
+        }
 
         return this;
     }
 
-    public PlaceOrderPage selectTimePeriod(String fromYear, String fromMonth, String fromDate,
-                                           String toYear, String toMonth, String toDate) {
-        fromDateInput.click();
-        fromDateInput.findElement(By.xpath(PRE_TEXT_1 + fromYear + SUF_TEXT_1)).click();
-        fromDateInput.findElement(By.xpath(PRE_TEXT_1 + fromMonth + SUF_TEXT_1)).click();
-        fromDateInput.findElement(By.xpath(PRE_TEXT_1 + fromDate + SUF_TEXT_1)).click();
-        toDateInput.click();
-        toDateInput.findElement(By.xpath(PRE_TEXT_1 + toYear + SUF_TEXT_1)).click();
-        toDateInput.findElement(By.xpath(PRE_TEXT_1 + toMonth + SUF_TEXT_1)).click();
-        toDateInput.findElement(By.xpath("//div[@class='to date-input']"
-                + PRE_TEXT_1 + toDate + SUF_TEXT_1)).click();
-
-        return this;
-    }
-
-    public PlaceOrderPage unselectWeatherParameter(String[] parameters) {
-        if (parameters.length > 0) {
+    public PlaceOrderPage unselectWeatherParameter(List<String> parameters) {
+        if (parameters != null) {
             weatherParameterCbb.click();
             for (String para : parameters
             ) {
-                if (weatherParameterCkl.findElement
-                        (By.xpath(PRE_TEXT_2 + para + SUF_TEXT_2)).isSelected()) {
-                    weatherParameterCkl.findElement(By.xpath(PRE_TEXT_2 + para + SUF_TEXT_4)).click();
-                }
+                CheckBox.unselect(weatherParameterCkl, para);
             }
             weatherParaCloseBtn.click();
         }
@@ -162,26 +166,19 @@ public class PlaceOrderPage extends AbstractPage {
     public PlaceOrderPage selectUnit(String unit) {
         if (unit != null) {
             unitCbb.click();
-            if (!unitCkl.findElement(By.xpath(PRE_TEXT_2 + unit + SUF_TEXT_2)).isSelected()) {
-                unitCkl.findElement(By.xpath(PRE_TEXT_2 + unit + SUF_TEXT_3)).click();
-            }
+            unitCkl.findElement(By.xpath(PRE_LABEL + unit + SUF_SPAN)).click();
             unitCloseBtn.click();
         }
 
         return this;
     }
 
-    public PlaceOrderPage selectFileFormat(String[] fileFormat) {
-        if (fileFormat.length > 0) {
+    public PlaceOrderPage selectFileFormat(List<String> fileFormat) {
+        if (fileFormat != null) {
             fileFormatCbb.click();
             for (String format : fileFormat
             ) {
-                if (!fileFormatCkl.findElement
-                        (By.xpath(PRE_TEXT_2 + format + SUF_TEXT_2))
-                        .isSelected()) {
-                    fileFormatCkl.findElement
-                            (By.xpath(PRE_TEXT_2 + format + SUF_TEXT_4)).click();
-                }
+                CheckBox.select(fileFormatCkl, format);
             }
             fileFormatCloseBtn.click();
         }
@@ -192,9 +189,7 @@ public class PlaceOrderPage extends AbstractPage {
     public PlaceOrderPage selectDownLoadOption(String downLoadOption) {
         if (downLoadOption != null) {
             downLoadOptionCbb.click();
-            if (!downLoadOptionCkl.findElement(By.xpath(PRE_TEXT_2 + downLoadOption + SUF_TEXT_2)).isSelected()) {
-                downLoadOptionCkl.findElement(By.xpath(PRE_TEXT_2 + downLoadOption + SUF_TEXT_3)).click();
-            }
+            downLoadOptionCkl.findElement(By.xpath(PRE_LABEL + downLoadOption + SUF_SPAN)).click();
             downLoadOptionCloseBtn.click();
         }
 
@@ -202,18 +197,17 @@ public class PlaceOrderPage extends AbstractPage {
     }
 
     public PlaceOrderPage selectState(String state) {
-        selectStateCbb.click();
-        new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.elementToBeClickable
-                        (By.xpath("//div[@class='menu-item']//span[contains(text(),'" + state + "')]")));
-        selectStateCbb.findElement(By.xpath("//div[@class='menu-item']//span[contains(text(),'" + state + "')]")).click();
+        if (state != null) {
+            ComboBox.select(selectStateCbb, state);
+        }
 
         return this;
     }
 
     public PlaceOrderPage selectYear(String year) {
-        selectYearCbb.click();
-        selectYearCbb.findElement(By.xpath("//span[contains(text(),'" + year + "')]")).click();
+        if (year != null) {
+            ComboBox.select(selectYearCbb, year);
+        }
 
         return this;
     }
@@ -222,41 +216,49 @@ public class PlaceOrderPage extends AbstractPage {
         placeOrderBtn.click();
     }
 
+    public boolean isOrderDetailConfirmationDisplayed() {
+        return orderDetailTtl.isEmpty();
+    }
+
     public void closeOrderDetailsPopUp() {
         orderDetailCloseBtn.click();
     }
 
-    public OrderDetail getConfirmationOrderDetail() {
-        String periodTime = orderDetailTbl.findElement(By.xpath
-                ("//td[contains(text(), 'From - To:')]/following-sibling::td"))
-                .getText();
-        String noOfLocations = orderDetailTbl.findElement(By.xpath
-                ("//b[contains(text(), 'Number of locations:')]/../following-sibling::td"))
-                .getText();
-        String weatherPara = orderDetailTbl.findElement(By.xpath
-                ("//b[contains(text(), 'Weather parameters:')]/../following-sibling::td"))
-                .getText();
-        String fileFormat = orderDetailTbl.findElement(By.xpath
-                ("//td[contains(text(), 'File formats:')]/following-sibling::td"))
-                .getText();
-        String unit = orderDetailTbl.findElement(By.xpath
-                ("//td[contains(text(), 'Units:')]/following-sibling::td"))
-                .getText();
-        String downLoadOption = orderDetailTbl.findElement(By.xpath
-                ("//td[contains(text(), 'Download:')]/following-sibling::td"))
-                .getText();
+    public OrderDetail getOrderDetail() {
+        String periodTime = Table.getTableCellValueByRowName(orderDetailTbl, "From - To");
+        String noOfLocations = Table.getTableCellValueByRowName(orderDetailTbl, "Number of locations");
+        String weatherPara = Table.getTableCellValueByRowName(orderDetailTbl, "Weather parameters");
+        String fileFormat = Table.getTableCellValueByRowName(orderDetailTbl, "File formats");
+        String unit = Table.getTableCellValueByRowName(orderDetailTbl, "Units");
+        String downLoadOption = Table.getTableCellValueByRowName(orderDetailTbl, "Download");
 
         return new OrderDetail(periodTime, noOfLocations, weatherPara, fileFormat, unit, downLoadOption);
     }
 
     private void waitForPageLoaded() {
         new WebDriverWait(driver, TIMEOUT_IN_SECONDS).
-                until(isPresent(By.id("gmap")));
-
+                until(WaitForAction.isElementPresent(By.id("gmap")));
     }
 
     @Getter
-    @AllArgsConstructor
+    @Setter
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    public static class Product {
+        private String name;
+        private Location location;
+        private Date fromDate;
+        private Date toDate;
+        private List<String> weatherPara;
+        private String unit;
+        private List<String> fileFormat;
+        private String downLoadOption;
+        private String state;
+        private String year;
+    }
+
+    @Setter
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public static class OrderDetail {
         private String periodTime;
         private String noOfLocations;
@@ -266,4 +268,31 @@ public class PlaceOrderPage extends AbstractPage {
         private String downLoadOption;
 
     }
+
+    @Setter
+    @NoArgsConstructor
+    public static class Location {
+        private String searchBy;
+        private String locationOrImportFile;
+        private Coordinates coordinates;
+
+        public Location(String searchBy, String locationOrImportFile) {
+            this.searchBy = searchBy;
+            this.locationOrImportFile = locationOrImportFile;
+        }
+
+        public Location(String searchBy, Coordinates coordinates) {
+            this.searchBy = searchBy;
+            this.coordinates = coordinates;
+        }
+    }
+
+    @Setter
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    private static class Coordinates {
+        private String latitude;
+        private String longitude;
+
+    }
+
 }

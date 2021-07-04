@@ -1,10 +1,9 @@
 package action;
 
-import org.openqa.selenium.WebElement;
 import pages.MarketPlacePage;
 import pages.PlaceOrderPage;
 
-import java.util.List;
+import static pages.PlaceOrderPage.*;
 
 public class PlaceOrderAction extends ActionBase {
     private final MarketPlacePage marketPlacePage;
@@ -23,65 +22,27 @@ public class PlaceOrderAction extends ActionBase {
         return this;
     }
 
-    public PlaceOrderAction selectProduct(String product) {
-        marketPlacePage.selectProductToOrder(product);
-
-        return this;
+    public void orderProduct(Product product) {
+        marketPlacePage.selectProductToOrder(product.getName());
+        placeOrderPage.addLocation(product.getLocation())
+                .selectTimePeriod(product.getFromDate(),product.getToDate())
+                .unselectWeatherParameter(product.getWeatherPara())
+                .selectUnit(product.getUnit())
+                .selectFileFormat(product.getFileFormat())
+                .selectDownLoadOption(product.getDownLoadOption())
+                .selectYear(product.getYear())
+                .selectState(product.getState())
+                .submitOrderPlace();
     }
 
-    public PlaceOrderAction addLocation(String searchStr, String searchBy) {
-        placeOrderPage.enterSearch(searchStr, searchBy).clickAddLocationButton();
+    public PlaceOrderPage.OrderDetail getOrderDetailConfirmation() {
 
-        return this;
+        return placeOrderPage.getOrderDetail();
     }
 
-    public PlaceOrderAction setTimePeriod(String fromYear, String fromMonth, String fromDate,
-                                          String toYear, String toMonth, String toDate) {
-        placeOrderPage.selectTimePeriod(fromYear, fromMonth, fromDate, toYear, toMonth, toDate);
+    public boolean isOrderDetailConfirmationDisplayed() {
 
-        return this;
-    }
-
-    public PlaceOrderAction filter(String[] weatherPara, String unit,
-                                   String[] formatFile, String downLoadOption) {
-        placeOrderPage
-                .unselectWeatherParameter(weatherPara)
-                .selectUnit(unit)
-                .selectFileFormat(formatFile)
-                .selectDownLoadOption(downLoadOption);
-
-        return this;
-    }
-
-    public void orderHistoricalWeatherDataByState(String state, String year) {
-        placeOrderPage.selectState(state).selectYear(year).
-                submitOrderPlace();
-
-    }
-
-    public PlaceOrderAction filter(String[] weatherPara, String unit,
-                                   String[] formatFile) {
-        placeOrderPage
-                .unselectWeatherParameter(weatherPara)
-                .selectUnit(unit)
-                .selectFileFormat(formatFile);
-
-        return this;
-    }
-
-    public void submitOrder() {
-        placeOrderPage.submitOrderPlace();
-
-    }
-
-    public PlaceOrderPage.OrderDetail getOrderConfirmation() {
-
-        return placeOrderPage.getConfirmationOrderDetail();
-    }
-
-    public List<WebElement> getOrderTitle() {
-
-        return placeOrderPage.getOrderDetailTtl();
+        return placeOrderPage.isOrderDetailConfirmationDisplayed();
     }
 
     public void closeOrderDetails() {
@@ -91,6 +52,5 @@ public class PlaceOrderAction extends ActionBase {
     @Override
     public void tearDown() {
         marketPlacePage.close();
-
     }
 }

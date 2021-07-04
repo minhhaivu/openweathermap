@@ -1,45 +1,66 @@
 package test.placeorder;
 
-import actor.PlaceOrderTester;
+import actor.Tester;
+import element.DateInput;
 import org.testng.annotations.Test;
 import pages.PlaceOrderPage;
 import test.TestBase;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class OrderHistoryForecastBulkTest extends TestBase {
 
     @Test
     public void orderHistoryBulk() {
-        String product = "History Forecast Bulk";
-        String city = "Fort Lauderdale FL, USA";
-        String searchByLocation = "By location";
-        String fromYear = "2020";
-        String fromMonth = "Nov";
-        String fromDate = "13";
-        String toYear = "2020";
-        String toMonth = "Nov";
-        String toDate = "21";
-        String[] unselectedWeatherPara = {"Temperature"};
-        String unit = "Imperial (Fahrenheit, hPa, miles/hour, mm/h)";
-        String[] formatFile = {"CSV", "JSON"};
-        String downLoadOption = "One file per location";
-        String fromTo = "13-11-2020 - 21-11-2020";
-        String noOfLocations = "1";
-        String weatherPara = "Pressure, Wind, Humidity, Clouds, Dew point, Precipitation";
-        String fileFormatOptions = "CSV, JSON";
-        PlaceOrderPage.OrderDetail expectationOrder = new PlaceOrderPage.OrderDetail
-                (fromTo, noOfLocations, weatherPara, fileFormatOptions, unit, downLoadOption);
+        PlaceOrderPage.Product product = historyBulkProduct();
+        PlaceOrderPage.OrderDetail expectationOrder = orderDetailConfirmation(product);
+        Tester tester = Tester.getInstance();
 
-        PlaceOrderTester tester = PlaceOrderTester.getInstance();
         tester.placeOrderAction
-                .openMarketPlace().selectProduct(product)
-                .addLocation(city, searchByLocation)
-                .setTimePeriod(fromYear, fromMonth, fromDate, toYear, toMonth, toDate)
-                .filter(unselectedWeatherPara, unit, formatFile,downLoadOption)
-                .submitOrder();
-        PlaceOrderPage.OrderDetail confirmationOrder = tester.placeOrderAction.getOrderConfirmation();
-        Validator.checkOrderDetail(expectationOrder, confirmationOrder);
+                .openMarketPlace().orderProduct(product);
+        PlaceOrderPage.OrderDetail confirmationOrder = tester.placeOrderAction.getOrderDetailConfirmation();
+        PlaceOrderValidator.checkOrderDetail(expectationOrder, confirmationOrder);
         tester.placeOrderAction.closeOrderDetails();
         tester.placeOrderAction
                 .tearDown();
+    }
+
+    private PlaceOrderPage.Product historyBulkProduct() {
+        String city = "Fort Lauderdale FL, USA";
+        String searchByLocation = "By location";
+        PlaceOrderPage.Location location = new PlaceOrderPage.Location(searchByLocation, city);
+        String fromDate = "13-Nov-2020";
+        String toDate = "21-Nov-2020";
+        Date from = DateInput.stringToDate("dd-MMM-yyyy", fromDate);
+        Date to = DateInput.stringToDate("dd-MMM-yyyy", toDate);
+        List<String> unselectedWeatherPara = new ArrayList<>();
+        unselectedWeatherPara.add("Temperature");
+        String unit = "Imperial (Fahrenheit, hPa, miles/hour, mm/h)";
+        List<String> formatFile = new ArrayList<>();
+        formatFile.add("CSV");
+        formatFile.add("JSON");
+
+        PlaceOrderPage.Product product = new PlaceOrderPage.Product();
+        product.setName("History Bulk");
+        product.setLocation(location);
+        product.setFromDate(from);
+        product.setToDate(to);
+        product.setWeatherPara(unselectedWeatherPara);
+        product.setUnit(unit);
+        product.setFileFormat(formatFile);
+        return product;
+    }
+
+    private PlaceOrderPage.OrderDetail orderDetailConfirmation(PlaceOrderPage.Product product) {
+        String fromTo = DateInput.dateToString("dd-MM-y", product.getFromDate())
+                + " - " + DateInput.dateToString("dd-MM-y", product.getToDate());
+        String weatherPara = "Min temperature, Max temperature, Feels like, Wind, Pressure, " +
+                "Humidity, Clouds, Weather conditions, Rain, Snow";
+        String fileFormatOptions = "CSV, JSON";
+
+        return new PlaceOrderPage.OrderDetail
+                (fromTo, "1", weatherPara, fileFormatOptions, product.getUnit(), product.getDownLoadOption());
     }
 }

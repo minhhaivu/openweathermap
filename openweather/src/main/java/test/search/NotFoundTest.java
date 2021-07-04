@@ -1,6 +1,6 @@
 package test.search;
 
-import actor.SearchTester;
+import actor.Tester;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -10,9 +10,9 @@ import java.util.List;
 public class NotFoundTest {
     @Test(dataProvider = "invalidCities")
     public void notFoundTest(String city) {
-        SearchTester tester = SearchTester.getInstance();
+        Tester tester = Tester.getInstance();
         List<WebElement> returnResult = tester.searchAction.searchNotFound(city);
-        Validator.checkNotFound(returnResult);
+        SearchValidator.checkNotFound(returnResult);
     }
 
     @DataProvider
