@@ -1,7 +1,7 @@
 package pages;
 
 import action.WaitForAction;
-import element.*;
+import pages.element.*;
 import lombok.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;

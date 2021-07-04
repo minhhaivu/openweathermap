@@ -1,7 +1,7 @@
 package test.placeorder;
 
 import actor.Tester;
-import element.DateInput;
+import pages.element.DateInput;
 import org.testng.annotations.Test;
 import pages.PlaceOrderPage;
 import test.TestBase;

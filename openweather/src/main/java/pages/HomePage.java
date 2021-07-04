@@ -1,12 +1,15 @@
 package pages;
 
-import org.openqa.selenium.*;
+import action.WaitForAction;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import action.WaitForAction;
+import pages.element.Menu;
 
 public class HomePage extends AbstractPage {
     private static final String BASE_URL = "https://openweathermap.org/";
@@ -46,18 +49,15 @@ public class HomePage extends AbstractPage {
         searchCityTxt.sendKeys(Keys.ENTER);
     }
 
-
     private void waitForPageLoaded() {
-        ExpectedCondition<Boolean> spinnerPresence
-                = WaitForAction.isElementPresent(loadingSpinner);
+        ExpectedCondition<Boolean> spinnerPresence = WaitForAction.isElementPresent(loadingSpinner);
         new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
                 .until(ExpectedConditions.not(spinnerPresence));
     }
 
     public void switchToPage(String title) {
         String currentPage = pageDriver.getWindowHandle();
-        for (String windowHandle : pageDriver.getWindowHandles()
-        ) {
+        for (String windowHandle : pageDriver.getWindowHandles()) {
             if (!currentPage.equals(windowHandle)) {
                 pageDriver.switchTo().window(windowHandle);
                 if (pageDriver.getTitle().contains(title)) {
@@ -67,4 +67,8 @@ public class HomePage extends AbstractPage {
         }
     }
 
+    public void openSignInPage() {
+        Menu menu = new Menu(pageDriver);
+        menu.select("Sign In");
+    }
 }

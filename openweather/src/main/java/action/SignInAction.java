@@ -1,6 +1,5 @@
 package action;
 
-import element.Menu;
 import org.openqa.selenium.WebElement;
 import pages.HomePage;
 import pages.SignInPage;
@@ -13,7 +12,6 @@ public class SignInAction extends ActionBase {
     private final HomePage homePage;
     private final SignInPage signInPage;
     private final UserHomePage userHomePage;
-    private final Menu homeMenu;
 
     public SignInAction() {
 
@@ -22,14 +20,10 @@ public class SignInAction extends ActionBase {
         homePage = getPageInstance(HomePage.class);
         signInPage = getPageInstance(SignInPage.class);
         userHomePage = getPageInstance(UserHomePage.class);
-        homeMenu = new Menu();
-        homeMenu.getInstance();
-
     }
 
     public void signIn(String userEmail, String password) {
         homePage.open();
-        homeMenu.select("Sign in");
         signInPage.enterSignInInfo(userEmail, password).submitSignIn();
     }
 

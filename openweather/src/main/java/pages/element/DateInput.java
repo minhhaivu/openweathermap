@@ -1,4 +1,4 @@
-package element;
+package pages.element;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

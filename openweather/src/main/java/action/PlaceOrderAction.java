@@ -22,6 +22,23 @@ public class PlaceOrderAction extends ActionBase {
         return this;
     }
 
+
+    public void _orderProduct(Product product) {
+        marketPlacePage.selectProductToOrder(product.getName());
+
+//        placeOrderPage.
+
+        placeOrderPage.addLocation(product.getLocation())
+            .selectTimePeriod(product.getFromDate(),product.getToDate())
+            .unselectWeatherParameter(product.getWeatherPara())
+            .selectUnit(product.getUnit())
+            .selectFileFormat(product.getFileFormat())
+            .selectDownLoadOption(product.getDownLoadOption())
+            .selectYear(product.getYear())
+            .selectState(product.getState())
+            .submitOrderPlace();
+    }
+
     public void orderProduct(Product product) {
         marketPlacePage.selectProductToOrder(product.getName());
         placeOrderPage.addLocation(product.getLocation())
