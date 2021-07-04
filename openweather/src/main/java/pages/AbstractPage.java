@@ -5,11 +5,9 @@ import org.openqa.selenium.WebDriver;
 
 @NoArgsConstructor
 public abstract class AbstractPage {
-    protected WebDriver driver;
+    protected WebDriver pageDriver;
 
     public void close() {
-        driver.close();
-        driver.quit();
+        pageDriver.quit();
     }
-
 }

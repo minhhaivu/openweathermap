@@ -15,7 +15,7 @@ public class ResultCountTest extends TestBase {
         Tester tester = Tester.getInstance();
         List<SearchPage.CityInfo> cityInfoList = tester.searchAction.search(searchString);
         SearchValidator.checkResultCount(cityInfoList.size(), expectedCount);
-        tester.searchAction.tearDown();
+        tester.searchAction.close();
     }
 
     @DataProvider

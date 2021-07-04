@@ -19,7 +19,7 @@ public class SearchAction extends ActionBase {
     }
 
     @Override
-    public void tearDown() {
+    public void close() {
         searchPage.close();
     }
 

@@ -24,7 +24,7 @@ public class OrderHistoryBulkTest extends TestBase {
         PlaceOrderValidator.checkOrderDetail(expectationOrder, confirmationOrder);
         tester.placeOrderAction.closeOrderDetails();
         tester.placeOrderAction
-                .tearDown();
+                .close();
     }
 
     private PlaceOrderPage.Product historyBulkProduct() {

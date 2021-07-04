@@ -28,4 +28,8 @@ public class TestBase {
     protected void closeTestSuite() {
         // define later
     }
+
+    protected void executeBeforeClass() {
+        // register new User
+    }
 }

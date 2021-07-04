@@ -102,7 +102,7 @@ public class PlaceOrderPage extends AbstractPage {
     private WebElement orderDetailCloseBtn;
 
     public PlaceOrderPage(WebDriver driver) {
-        this.driver = driver;
+        this.pageDriver = driver;
     }
 
     public PlaceOrderPage addLocation(Location location) {
@@ -123,7 +123,7 @@ public class PlaceOrderPage extends AbstractPage {
                     //implement later
                     break;
             }
-            new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
+            new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
                     .until(ExpectedConditions.visibilityOf(addLocationBtn));
             addLocationBtn.click();
         }
@@ -236,7 +236,7 @@ public class PlaceOrderPage extends AbstractPage {
     }
 
     private void waitForPageLoaded() {
-        new WebDriverWait(driver, TIMEOUT_IN_SECONDS).
+        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS).
                 until(WaitForAction.isElementPresent(By.id("gmap")));
     }
 

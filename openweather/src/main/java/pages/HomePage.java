@@ -24,18 +24,18 @@ public class HomePage extends AbstractPage {
     private By loadingSpinner = By.xpath("//div[@class='owm-loader']");
 
     public HomePage(WebDriver driver) {
-        this.driver = driver;
+        this.pageDriver = driver;
     }
 
     public HomePage open() {
-        driver.get(BASE_URL);
+        pageDriver.get(BASE_URL);
         waitForPageLoaded();
 
         return this;
     }
 
     public HomePage enterSearchTxt(String search) {
-        new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
+        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
                 .until(ExpectedConditions.elementToBeClickable(searchCityTxt));
         searchCityTxt.clear();
         searchCityTxt.sendKeys(search);
@@ -50,17 +50,17 @@ public class HomePage extends AbstractPage {
     private void waitForPageLoaded() {
         ExpectedCondition<Boolean> spinnerPresence
                 = WaitForAction.isElementPresent(loadingSpinner);
-        new WebDriverWait(driver, TIMEOUT_IN_SECONDS)
+        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
                 .until(ExpectedConditions.not(spinnerPresence));
     }
 
     public void switchToPage(String title) {
-        String currentPage = driver.getWindowHandle();
-        for (String windowHandle : driver.getWindowHandles()
+        String currentPage = pageDriver.getWindowHandle();
+        for (String windowHandle : pageDriver.getWindowHandles()
         ) {
             if (!currentPage.equals(windowHandle)) {
-                driver.switchTo().window(windowHandle);
-                if (driver.getTitle().contains(title)) {
+                pageDriver.switchTo().window(windowHandle);
+                if (pageDriver.getTitle().contains(title)) {
                     break;
                 }
             }

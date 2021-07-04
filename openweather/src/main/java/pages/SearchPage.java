@@ -21,7 +21,7 @@ public class SearchPage extends AbstractPage {
     private WebElement title;
 
     public SearchPage(WebDriver driver) {
-        this.driver = driver;
+        this.pageDriver = driver;
     }
 
     public List<CityInfo> getSearchResult() {
@@ -37,12 +37,12 @@ public class SearchPage extends AbstractPage {
     }
 
     private List<WebElement> getTableRows() {
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(title));
+        new WebDriverWait(pageDriver, 10).until(ExpectedConditions.visibilityOf(title));
         return forecastList.findElements(By.xpath("//tr"));
     }
 
     public List<WebElement> getNotFoundText (){
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(title));
+        new WebDriverWait(pageDriver, 10).until(ExpectedConditions.visibilityOf(title));
         return forecastList.findElements(By.xpath("//div[contains(text(),'Not found')]"));
     }
 

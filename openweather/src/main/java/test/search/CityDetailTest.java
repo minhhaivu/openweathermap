@@ -16,7 +16,7 @@ public class CityDetailTest extends TestBase {
         Tester tester = Tester.getInstance();
         List<SearchPage.CityInfo> cityList = tester.searchAction.search("Ho Chi Minh");
         SearchValidator.checkResultDetail(cityList, expectedCities);
-        tester.searchAction.tearDown();
+        tester.searchAction.close();
     }
 
     private static List<SearchPage.CityInfo> cityList() {

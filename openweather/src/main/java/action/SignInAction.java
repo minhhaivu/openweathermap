@@ -33,9 +33,8 @@ public class SignInAction extends ActionBase {
         signInPage.enterSignInInfo(userEmail, password).submitSignIn();
     }
 
-    public List<WebElement> getSuccessMsg() {
-
-        return userHomePage.getSuccessSignInMsg();
+    public String getSuccessMsg() {
+        return userHomePage.getSuccessMsg();
     }
 
     public List<WebElement> getInvalidMsg() {
@@ -44,7 +43,7 @@ public class SignInAction extends ActionBase {
     }
 
     @Override
-    public void tearDown() {
+    public void close() {
         userHomePage.close();
     }
 }

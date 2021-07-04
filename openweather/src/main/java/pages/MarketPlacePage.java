@@ -18,11 +18,11 @@ public class MarketPlacePage extends AbstractPage {
     private WebElement title;
 
     public MarketPlacePage(WebDriver driver) {
-        this.driver = driver;
+        this.pageDriver = driver;
     }
 
     public MarketPlacePage open() {
-        driver.get(URL);
+        pageDriver.get(URL);
         waitForPageLoaded();
 
         return this;
@@ -34,7 +34,7 @@ public class MarketPlacePage extends AbstractPage {
     }
 
     private void waitForPageLoaded() {
-        new WebDriverWait(driver, TIME_OUT_IN_SECONDS)
+        new WebDriverWait(pageDriver, TIME_OUT_IN_SECONDS)
                 .until(ExpectedConditions.visibilityOf(title));
     }
 

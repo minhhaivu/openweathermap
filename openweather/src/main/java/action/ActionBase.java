@@ -15,5 +15,5 @@ public abstract class ActionBase {
         return PageFactory.initElements(DriverGetter.getDriver(browserType), clazz);
     }
 
-    public abstract void tearDown();
+    public abstract void close();
 }

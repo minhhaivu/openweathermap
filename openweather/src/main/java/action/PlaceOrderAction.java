@@ -50,7 +50,7 @@ public class PlaceOrderAction extends ActionBase {
     }
 
     @Override
-    public void tearDown() {
+    public void close() {
         marketPlacePage.close();
     }
 }
