@@ -1,6 +1,6 @@
 package pages.panel;
 
-import objects.LocationType;
+import objects.search.LocationType;
 import org.openqa.selenium.WebDriver;
 import pages.AbstractPage;
 

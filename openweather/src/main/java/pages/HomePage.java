@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.element.Menu;
+import element.Menu;
 
 public class HomePage extends AbstractPage {
     private static final String BASE_URL = "https://openweathermap.org/";

@@ -1,6 +1,6 @@
 package pages.panel;
 
-import objects.LocationType;
+import objects.search.LocationType;
 
 public interface Search {
     void search(LocationType type);

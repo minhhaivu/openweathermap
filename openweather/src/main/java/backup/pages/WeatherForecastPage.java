@@ -26,7 +26,7 @@ public class WeatherForecastPage {
 	   * Capture cityForecastWeatherLink for given city & country code
 	   * 
 	   * @param given city & country
-	   * @return true if given city & country is present in cityLabel pages.element of Forecast Weather page
+	   * @return true if given city & country is present in cityLabel element of Forecast Weather page
 	   */
 	public boolean checkWeatherForecast(String city, String countrycode)
 	{
