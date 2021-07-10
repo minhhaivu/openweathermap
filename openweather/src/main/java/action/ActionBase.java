@@ -5,13 +5,15 @@ import org.openqa.selenium.support.PageFactory;
 import pages.AbstractPage;
 
 public abstract class ActionBase {
-    private String browserType;
+    private final String browserType;
 
-    public ActionBase() {
+    protected ActionBase() {
         browserType = "chrome";
     }
 
     protected <T extends AbstractPage> T getPageInstance(Class<T> clazz) {
         return PageFactory.initElements(DriverGetter.getDriver(browserType), clazz);
     }
+
+    public abstract void close();
 }

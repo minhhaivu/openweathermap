@@ -1,5 +1,6 @@
 package action;
 
+import org.openqa.selenium.WebElement;
 import pages.HomePage;
 import pages.SearchPage;
 
@@ -7,8 +8,8 @@ import java.util.List;
 
 public class SearchAction extends ActionBase {
 
-    private HomePage homePage;
-    private SearchPage searchPage;
+    private final HomePage homePage;
+    private final SearchPage searchPage;
 
     public SearchAction() {
         super();
@@ -17,8 +18,19 @@ public class SearchAction extends ActionBase {
         searchPage = getPageInstance(SearchPage.class);
     }
 
+    @Override
+    public void close() {
+        searchPage.close();
+    }
+
     public List<SearchPage.CityInfo> search(String string) {
         homePage.open().enterSearchTxt(string).submitSearch();
         return searchPage.getSearchResult();
     }
+
+    public List<WebElement> searchNotFound(String string) {
+        homePage.open().enterSearchTxt(string).submitSearch();
+        return searchPage.getNotFoundText();
+    }
+
 }

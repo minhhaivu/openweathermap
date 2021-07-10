@@ -1,9 +1,6 @@
 package test;
 
-import driver.DriverGetter;
-import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.*;
-import pages.AbstractPage;
 
 public class TestBase {
     private String browserType;
@@ -24,12 +21,15 @@ public class TestBase {
         closeTestSuite();
     }
 
-
     protected void setupTestSuite() {
         // define later
     }
 
-    protected  void closeTestSuite() {
+    protected void closeTestSuite() {
         // define later
+    }
+
+    protected void executeBeforeClass() {
+        // register new User
     }
 }
