@@ -2,6 +2,7 @@ package pages;
 
 
 import action.WaitForAction;
+import actor.Tester;
 import element.CheckBox;
 import element.DateInput;
 import element.Locator;
@@ -10,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import objects.product.CustomWeatherOrderDetail;
 import objects.product.OrderDetail;
 import objects.search.Coordinates;
 import objects.search.Import;
@@ -23,6 +25,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
 
 import java.util.*;
 
@@ -33,6 +36,7 @@ public class CustomWeatherProductPage extends AbstractPage {
     private static final long TIMEOUT_IN_SECONDS = 30;
     private static final String PRE_LABEL = "//label[contains(text(),'";
     private static final String SUF_SPAN = "')]//span";
+    private static final String SUF_INPUT = "')]/input";
 
     @FindBy(id = "gmap")
     private WebElement gmap;
@@ -206,7 +210,6 @@ public class CustomWeatherProductPage extends AbstractPage {
         return this;
     }
 
-
     public CustomWeatherProductPage unselectWeatherParameter(List<String> parameters) {
         weatherParameterCbb.click();
         for (String para : parameters
@@ -217,6 +220,19 @@ public class CustomWeatherProductPage extends AbstractPage {
 
         return this;
     }
+
+    public CustomWeatherProductPage selectWeatherParameter(HashMap<String,Boolean> parameters) {
+        weatherParameterCbb.click();
+        parameters.forEach((para,value)->{
+            By checkBoxLocator = By.xpath("//div[@class='owm-check-box-group columns']"+PRE_LABEL+ para + SUF_INPUT);
+            CheckBox weatherCkb = new CheckBox(pageDriver,checkBoxLocator);
+            weatherCkb.select(value);
+        });
+        weatherParaCloseBtn.click();
+
+        return this;
+    }
+
 
     public CustomWeatherProductPage selectUnit(String unit) {
         unitCbb.click();
@@ -232,6 +248,20 @@ public class CustomWeatherProductPage extends AbstractPage {
         ) {
             CheckBox.select(fileFormatCkl, format);
         }
+        fileFormatCloseBtn.click();
+
+        return this;
+    }
+
+    public CustomWeatherProductPage selectFileFormat(HashMap<String,Boolean> fileFormat) {
+        fileFormatCbb.click();
+        fileFormat.forEach((format,value) -> {
+            WebElement checkbox = fileFormatCkl.findElement(By.xpath
+                    (PRE_LABEL+ format + SUF_INPUT));
+            CheckBox fileFormatCkb= new CheckBox(pageDriver,checkbox);
+            fileFormatCkb.select(value);
+        });
+
         fileFormatCloseBtn.click();
 
         return this;

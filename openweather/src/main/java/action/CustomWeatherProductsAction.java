@@ -6,6 +6,8 @@ import pages.CustomWeatherOrderDetailPage;
 import pages.CustomWeatherProductPage;
 import pages.MarketPlacePage;
 
+import java.util.HashMap;
+
 public class CustomWeatherProductsAction extends ActionBase {
     private final MarketPlacePage marketPlacePage;
     private final CustomWeatherProductPage customWeatherProductPage;
@@ -21,8 +23,18 @@ public class CustomWeatherProductsAction extends ActionBase {
 
     public CustomWeatherProductsAction openMarketPlace() {
         marketPlacePage.open();
+        marketPlacePage.selectProductToOrder("History Bulk");
 
         return this;
+    }
+
+    public CustomWeatherProductsAction selectWeather(HashMap<String,Boolean> para) {
+        customWeatherProductPage.selectWeatherParameter(para);
+        return this;
+    }
+
+    public void selectFileFormat(HashMap<String,Boolean> fileFormat){
+        customWeatherProductPage.selectFileFormat(fileFormat);
     }
 
     public void orderCustomWeatherProduct(CustomWeatherProduct product) {
