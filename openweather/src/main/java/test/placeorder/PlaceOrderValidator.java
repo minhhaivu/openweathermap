@@ -1,18 +1,19 @@
 package test.placeorder;
 
+import action.HistoricalDataArchivesAction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.openqa.selenium.WebElement;
+import objects.product.CustomWeatherOrderDetail;
 import org.testng.Assert;
-import pages.PlaceOrderPage;
-
-import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlaceOrderValidator {
 
-    public static void checkOrderDetail(PlaceOrderPage.OrderDetail expectedOrder,
-                                        PlaceOrderPage.OrderDetail actualOrder) {
+    private static HistoricalDataArchivesAction historicalDataArchivesAction
+            = new HistoricalDataArchivesAction();
+
+    public static void checkCustomWeatherOrderDetail(CustomWeatherOrderDetail expectedOrder,
+                                                     CustomWeatherOrderDetail actualOrder) {
         Assert.assertEquals(expectedOrder.getPeriodTime(), actualOrder.getPeriodTime());
         Assert.assertEquals(expectedOrder.getNoOfLocations(), actualOrder.getNoOfLocations());
         Assert.assertEquals(expectedOrder.getWeatherPara(), actualOrder.getWeatherPara());
@@ -21,8 +22,8 @@ public class PlaceOrderValidator {
         Assert.assertEquals(expectedOrder.getDownLoadOption(), actualOrder.getDownLoadOption());
     }
 
-    public static void checkOrderDetailPageDisplay(boolean isDisplayed) {
-        Assert.assertTrue(isDisplayed,
+    public static void checkOrderDetailPageDisplay() {
+        Assert.assertEquals(historicalDataArchivesAction.getPageTitle(),"Order Detail",
                 "Order Detail Confirmation is not displayed!");
     }
 }

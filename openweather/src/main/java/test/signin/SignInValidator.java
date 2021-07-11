@@ -13,7 +13,8 @@ import java.util.List;
 public class SignInValidator {
     private static final SignInAction signInAction = new SignInAction();
 
-    public static void signInSucessfully() {
+
+    public static void signInSuccessfully() {
         Assert.assertTrue(StringUtils.isNotBlank(signInAction.getSuccessMsg()));
     }
 

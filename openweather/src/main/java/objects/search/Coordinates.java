@@ -1,10 +1,15 @@
 package objects.search;
 
-import objects.LocationType;
-
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class Coordinates implements LocationType {
     private String longitude;
     private String latitude;

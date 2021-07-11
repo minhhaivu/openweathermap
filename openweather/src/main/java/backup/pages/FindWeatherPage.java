@@ -92,7 +92,7 @@ public class FindWeatherPage {
 	 /**
 	   * Check if Not Found result is returned when given city is invalid
 	   * 
-	   * @return boolean based on if Not Found text pages.element is present
+	   * @return boolean based on if Not Found text element is present
 	   */
 	public boolean checkNotFoundReturn () {
 			 return driver.findElements(notFoundText).size() > 0;

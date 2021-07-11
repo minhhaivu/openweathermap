@@ -1,9 +1,11 @@
 package test.placeorder;
 
 import actor.Tester;
-import pages.element.DateInput;
+import element.DateInput;
+import objects.product.CustomWeatherOrderDetail;
+import objects.product.CustomWeatherProduct;
+import objects.search.Coordinates;
 import org.testng.annotations.Test;
-import pages.PlaceOrderPage;
 import test.TestBase;
 
 import java.util.ArrayList;
@@ -14,23 +16,23 @@ public class OrderHistoryForecastBulkTest extends TestBase {
 
     @Test
     public void orderHistoryBulk() {
-        PlaceOrderPage.Product product = historyBulkProduct();
-        PlaceOrderPage.OrderDetail expectationOrder = orderDetailConfirmation(product);
+        CustomWeatherProduct product = historyBulkProduct();
+        CustomWeatherOrderDetail expectationOrder = orderDetailConfirmation(product);
         Tester tester = Tester.getInstance();
 
-        tester.placeOrderAction
-                .openMarketPlace().orderProduct(product);
-        PlaceOrderPage.OrderDetail confirmationOrder = tester.placeOrderAction.getOrderDetailConfirmation();
-        PlaceOrderValidator.checkOrderDetail(expectationOrder, confirmationOrder);
-        tester.placeOrderAction.closeOrderDetails();
-        tester.placeOrderAction
+        tester.customWeatherProductsAction
+                .openMarketPlace().orderCustomWeatherProduct(product);
+
+        CustomWeatherOrderDetail confirmationOrder = tester.customWeatherProductsAction.getOrderDetailConfirmation();
+        PlaceOrderValidator.checkCustomWeatherOrderDetail(expectationOrder, confirmationOrder);
+
+        tester.customWeatherProductsAction.closeOrderDetails();
+        tester.customWeatherProductsAction
                 .close();
     }
 
-    private PlaceOrderPage.Product historyBulkProduct() {
-        String city = "Fort Lauderdale FL, USA";
-        String searchByLocation = "By location";
-        PlaceOrderPage.Location location = new PlaceOrderPage.Location(searchByLocation, city);
+    private CustomWeatherProduct historyBulkProduct() {
+        Coordinates coordinates = new Coordinates("26.122439","-80.137317");
         String fromDate = "13-Nov-2020";
         String toDate = "21-Nov-2020";
         Date from = DateInput.stringToDate("dd-MMM-yyyy", fromDate);
@@ -42,25 +44,24 @@ public class OrderHistoryForecastBulkTest extends TestBase {
         formatFile.add("CSV");
         formatFile.add("JSON");
 
-        PlaceOrderPage.Product product = new PlaceOrderPage.Product();
-        product.setName("History Bulk");
-        product.setLocation(location);
+        CustomWeatherProduct product = new CustomWeatherProduct("History Forecast Bulk");
+        product.setLocation(coordinates);
         product.setFromDate(from);
         product.setToDate(to);
-        product.setWeatherPara(unselectedWeatherPara);
+        product.setUnselectedWeatherPara(unselectedWeatherPara);
         product.setUnit(unit);
         product.setFileFormat(formatFile);
         return product;
     }
 
-    private PlaceOrderPage.OrderDetail orderDetailConfirmation(PlaceOrderPage.Product product) {
+    private CustomWeatherOrderDetail orderDetailConfirmation(CustomWeatherProduct product) {
         String fromTo = DateInput.dateToString("dd-MM-y", product.getFromDate())
                 + " - " + DateInput.dateToString("dd-MM-y", product.getToDate());
-        String weatherPara = "Min temperature, Max temperature, Feels like, Wind, Pressure, " +
-                "Humidity, Clouds, Weather conditions, Rain, Snow";
+        String weatherPara = "Pressure, Wind, Humidity, Clouds, Dew point, Precipitation";
         String fileFormatOptions = "CSV, JSON";
+        String downLoadOption = "All locations in a single file";
 
-        return new PlaceOrderPage.OrderDetail
-                (fromTo, "1", weatherPara, fileFormatOptions, product.getUnit(), product.getDownLoadOption());
+        return new CustomWeatherOrderDetail
+                (fromTo, "1", weatherPara, fileFormatOptions, product.getUnit(), downLoadOption);
     }
 }
