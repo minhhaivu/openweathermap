@@ -4,12 +4,13 @@ import action.HistoricalDataArchivesAction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import objects.product.CustomWeatherOrderDetail;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlaceOrderValidator {
 
-    private static HistoricalDataArchivesAction historicalDataArchivesAction
+    private final static HistoricalDataArchivesAction historicalDataArchivesAction
             = new HistoricalDataArchivesAction();
 
     public static void checkCustomWeatherOrderDetail(CustomWeatherOrderDetail expectedOrder,

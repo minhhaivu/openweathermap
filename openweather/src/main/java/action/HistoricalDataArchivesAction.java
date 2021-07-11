@@ -10,7 +10,6 @@ public class HistoricalDataArchivesAction extends ActionBase {
     private final HistoricalDataArchivesPage historicalDataArchivesPage;
     private final HistoricalArchivesOrderDetailPage historicalArchivesOrderDetailPage;
 
-
     public HistoricalDataArchivesAction() {
 
         super();

@@ -210,6 +210,7 @@ public class CustomWeatherProductPage extends AbstractPage {
         return this;
     }
 
+    //To be deleted after refactoring test
     public CustomWeatherProductPage unselectWeatherParameter(List<String> parameters) {
         weatherParameterCbb.click();
         for (String para : parameters
@@ -221,11 +222,11 @@ public class CustomWeatherProductPage extends AbstractPage {
         return this;
     }
 
-    public CustomWeatherProductPage selectWeatherParameter(HashMap<String,Boolean> parameters) {
+    public CustomWeatherProductPage selectWeatherParameter(HashMap<String, Boolean> parameters) {
         weatherParameterCbb.click();
-        parameters.forEach((para,value)->{
-            By checkBoxLocator = By.xpath("//div[@class='owm-check-box-group columns']"+PRE_LABEL+ para + SUF_INPUT);
-            CheckBox weatherCkb = new CheckBox(pageDriver,checkBoxLocator);
+        parameters.forEach((para, value) -> {
+            By checkBoxLocator = By.xpath("//div[@class='owm-check-box-group columns']" + PRE_LABEL + para + SUF_INPUT);
+            CheckBox weatherCkb = new CheckBox(pageDriver, checkBoxLocator);
             weatherCkb.select(value);
         });
         weatherParaCloseBtn.click();
@@ -253,12 +254,12 @@ public class CustomWeatherProductPage extends AbstractPage {
         return this;
     }
 
-    public CustomWeatherProductPage selectFileFormat(HashMap<String,Boolean> fileFormat) {
+    public CustomWeatherProductPage selectFileFormat(HashMap<String, Boolean> fileFormat) {
         fileFormatCbb.click();
-        fileFormat.forEach((format,value) -> {
+        fileFormat.forEach((format, value) -> {
             WebElement checkbox = fileFormatCkl.findElement(By.xpath
-                    (PRE_LABEL+ format + SUF_INPUT));
-            CheckBox fileFormatCkb= new CheckBox(pageDriver,checkbox);
+                    (PRE_LABEL + format + SUF_INPUT));
+            CheckBox fileFormatCkb = new CheckBox(pageDriver, checkbox);
             fileFormatCkb.select(value);
         });
 
@@ -268,7 +269,7 @@ public class CustomWeatherProductPage extends AbstractPage {
     }
 
     public CustomWeatherProductPage selectDownLoadOption(String downLoadOption) {
-        if(downLoadOption!=null) {
+        if (downLoadOption != null) {
             downLoadOptionCbb.click();
             downLoadOptionCkl.findElement(By.xpath(PRE_LABEL + downLoadOption + SUF_SPAN)).click();
             downLoadOptionCloseBtn.click();

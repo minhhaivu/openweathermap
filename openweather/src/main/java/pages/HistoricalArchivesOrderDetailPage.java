@@ -11,8 +11,8 @@ public class HistoricalArchivesOrderDetailPage extends AbstractPage{
     @FindBy(xpath = "//div[@class='pop-up pop-up-confirmation']//h3[contains(text(),'Order details')]")
     private List<WebElement> orderDetailTtl;
 
-    public void HistoricalArchivesOrderDetailPage (WebDriver driver) {
-        this.pageDriver=driver;
+    public HistoricalArchivesOrderDetailPage(WebDriver driver) {
+        pageDriver = driver;
     }
 
     public String getPageTitle() {
