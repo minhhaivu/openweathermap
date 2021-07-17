@@ -1,40 +1,54 @@
 package element;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Table {
-    public static String getTableCellValueByRowName(WebElement table,String rowName) {
-        if(table.findElements(Locator.xpathTagContainText("td",rowName)).isEmpty()) {
+    private final WebDriver pageDriver;
+    private final WebElement tableElement;
 
-            return table.findElement(Locator.xpathContain
-                    ("//b[contains(text(), '",rowName,":')]/../following-sibling::td"))
-                    .getText();
-        } else {
+    private static final String B_ROW_PRE = "//b[contains(text(),'";
+    private static final String B_ROW_SUF = ":')]/../following-sibling::td";
+    private static final String TD_ROW_PRE = "//td[contains(text(),'";
+    private static final String TD_ROW_SUF = ":')]/following-sibling::td";
 
-            return table.findElement(Locator.xpathContain
-                    ("//td[contains(text(), '",rowName,":')]/following-sibling::td"))
-                    .getText();
-        }
+    private static final By row = By.xpath(".//table/tbody/tr");
+    private static final By column = By.xpath("./td");
 
+    private WebElement cell(int rowIdx, int colIdx) {
+        return tableElement.findElement(By.xpath(".//table/tbody/tr[" + rowIdx + "]/td[" + colIdx + "]"));
     }
 
-    public static String getTableCellValueByIndex(WebElement table, int rowIdx, int colIdx) {
-
-        return table.findElement(By.xpath("//table/tbody/tr["+rowIdx+"]/td[" +colIdx+ "]")).toString();
+    public Table(WebDriver driver, WebElement table) {
+        this.pageDriver = driver;
+        this.tableElement = table;
     }
 
-    public static int getTableRow(WebElement table) {
-
-        return table.findElements(By.xpath("//table/tbody/tr")).size();
+    public String getRowValue(String rowName) {
+        return rowValueWebElement(rowName).getText();
     }
 
-
-    public static int getTableColumn(WebElement table) {
-
-        return table.findElements(By.xpath("//table/tbody/tr/td")).size();
+    public int getTableRowCount() {
+        return tableElement.findElements(row).size();
     }
+
+    public int getTableColumnCount() {
+        return tableElement.findElement(row).findElements(column).size();
+    }
+
+    public String getTableCellValue(int rowIdx, int colIdx) {
+        return cell(rowIdx,colIdx).getText();
+    }
+
+    private boolean isRowHeaderBold(String rowName) {
+        return tableElement.findElements(Locator.xpathTagContainText("td", rowName)).isEmpty();
+    }
+
+    private WebElement rowValueWebElement(String rowName) {
+        return isRowHeaderBold(rowName)
+                ? tableElement.findElement(By.xpath(B_ROW_PRE + rowName + B_ROW_SUF))
+                : tableElement.findElement(By.xpath(TD_ROW_PRE + rowName + TD_ROW_SUF));
+    }
+
 }
