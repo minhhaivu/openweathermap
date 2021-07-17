@@ -22,7 +22,7 @@ public class ComboBox {
 
     public void select(String value) {
         comboBoxElement.click();
-        new WebDriverWait(pageDriver,20).until(WaitForAction.isElementPresent(Locator.xpathTagContainText("span", value)));
+        new WebDriverWait(pageDriver, 20).until(WaitForAction.isElementPresent(Locator.xpathTagContainText("span", value)));
         comboBoxElement.findElement(Locator.xpathTagContainText("span", value)).click();
     }
 

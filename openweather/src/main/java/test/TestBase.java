@@ -1,14 +1,6 @@
 package test;
 
-import actor.Tester;
-import objects.product.CustomWeatherOrderDetail;
-import objects.product.CustomWeatherProduct;
 import org.testng.annotations.*;
-import pages.CustomWeatherOrderDetailPage;
-import pages.CustomWeatherProductPage;
-import pages.MarketPlacePage;
-
-import java.util.HashMap;
 
 public class TestBase {
     private String browserType;
@@ -41,20 +33,4 @@ public class TestBase {
         // register new User
     }
 
-    @Test
-    public void orderHistoryBulk() {
-
-        Tester tester = Tester.getInstance();
-        HashMap<String,Boolean> weatherPara = new HashMap<> ();
-        weatherPara.put("Temperature",false);
-        weatherPara.put("Min temperature",true);
-        HashMap<String,Boolean> fileFormat = new HashMap<>();
-        fileFormat.put("CSV",true);
-        fileFormat.put("JSON",false);
-        tester.customWeatherProductsAction
-                .openMarketPlace().selectWeather(weatherPara).selectFileFormat(fileFormat);
-
-    }
-
-
-    }
+}

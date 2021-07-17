@@ -1,7 +1,7 @@
 package pages;
 
 import element.Table;
-import objects.product.CustomWeatherOrderDetail;
+import objects.product.CustomWeatherProduct;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,7 +27,7 @@ public class CustomWeatherOrderDetailPage extends AbstractPage{
         orderDetailCloseBtn.click();
     }
 
-    public CustomWeatherOrderDetail getOrderDetail() {
+    public CustomWeatherProduct getOrderDetail() {
         Table orderTable = new Table(pageDriver,orderDetailTbl);
         String periodTime = orderTable.getRowValue("From - To");
         String noOfLocations = orderTable.getRowValue("Number of locations");
@@ -35,8 +35,14 @@ public class CustomWeatherOrderDetailPage extends AbstractPage{
         String fileFormat = orderTable.getRowValue("File formats");
         String unit = orderTable.getRowValue("Units");
         String downLoadOption = orderTable.getRowValue("Download");
-
-        return new CustomWeatherOrderDetail (periodTime, noOfLocations, weatherPara, fileFormat, unit, downLoadOption);
+        return new CustomWeatherProduct().builder()
+                .datePeriod(periodTime)
+                .numberOfLocation(Integer.valueOf(noOfLocations))
+                .customWeatherPara(weatherPara)
+                .fileFormatInString(fileFormat)
+                .unit(unit)
+                .downLoadOption(downLoadOption)
+                .build();
     }
 
 

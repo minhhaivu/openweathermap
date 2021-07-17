@@ -2,10 +2,7 @@ package pages;
 
 
 import action.WaitForAction;
-import element.CheckBox;
-import element.DateInput;
-import element.Locator;
-import element.Table;
+import element.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +12,7 @@ import objects.search.Coordinates;
 import objects.search.Import;
 import objects.search.Location;
 import objects.search.LocationType;
+import org.apache.poi.ss.formula.functions.T;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -139,50 +137,31 @@ public class CustomWeatherProductPage extends AbstractPage {
 
     private void inputSearchString(String location) {
         waitForPageLoaded();
-
-        searchTxt.click();
-        searchByPopUp.findElement(Locator.buttonContainText("By location")).click();
-
-        searchTxt.click();
-        searchTxt.sendKeys(location);
-        WaitForAction.sleep(5);
-        searchTxt.sendKeys(Keys.DOWN, Keys.RETURN);
-
-        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.visibilityOf(addLocationBtn));
-        addLocationBtn.click();
+        TextBox search = new TextBox(pageDriver,searchTxt,searchByPopUp);
+        search.selectPopUpOption("By location");
+        search.enter(location,3,Keys.DOWN + "," + Keys.RETURN);
+        Button addLocation = new Button(pageDriver,addLocationBtn);
+        addLocation.click();
     }
 
     private void inputSearchString(String latitude, String longitude) {
         waitForPageLoaded();
-
-        searchTxt.click();
-        searchByPopUp.findElement(Locator.buttonContainText("By coordinates")).click();
-
-        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.visibilityOf(searchCoordinatePanel));
-        latitudeTxt.click();
-        latitudeTxt.sendKeys(latitude);
-
-        longitudeTxt.click();
-        longitudeTxt.sendKeys(longitude);
-        longitudeTxt.sendKeys(Keys.RETURN);
-
-        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.visibilityOf(addLocationBtn));
-        Actions action = new Actions(pageDriver);
-        action.doubleClick(addLocationBtn).perform();
+        TextBox search = new TextBox(pageDriver,searchTxt,searchByPopUp);
+        search.selectPopUpOption("By coordinates");
+        TextBox latTxt = new TextBox(pageDriver,latitudeTxt);
+        latTxt.enter(latitude);
+        TextBox longTxt = new TextBox(pageDriver,longitudeTxt);
+        longTxt.enter(longitude,Keys.RETURN);
+        Button addLocation = new Button(pageDriver,addLocationBtn);
+        addLocation.doubleClick();
     }
 
     private void importCSVFile(String filePath) {
-
-        searchTxt.click();
-        searchByPopUp.findElement(Locator.buttonContainText("Import")).click();
-
+        waitForPageLoaded();
+        TextBox search = new TextBox(pageDriver,searchTxt,searchByPopUp);
+        search.selectPopUpOption("Import");
         importCSVFileBtn.click();
-
     }
-
 
     public CustomWeatherProductPage selectFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -200,38 +179,23 @@ public class CustomWeatherProductPage extends AbstractPage {
         calendar.setTime(date);
         toDateInput.click();
         DateInput to = new DateInput(pageDriver,toDateInput);
-        to.selectYear(calendar.get(Calendar.YEAR));
-        to.selectMonth(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-        toDateInput.findElement(By.xpath("//div[@class='to date-input']//td[contains(text(),"
-                + Integer.toString(calendar.get(Calendar.DATE)) + ")]")).click();
-
-        return this;
-    }
-
-    //To be deleted after refactoring test
-    public CustomWeatherProductPage unselectWeatherParameter(List<String> parameters) {
-        weatherParameterCbb.click();
-        for (String para : parameters
-        ) {
-            CheckBox.unselect(weatherParameterCkl, para);
-        }
-        weatherParaCloseBtn.click();
-
+        to.selectDate(calendar.get(Calendar.YEAR),
+                calendar.getDisplayName((Calendar.MONTH), Calendar.SHORT, Locale.getDefault()),
+                calendar.get(Calendar.DATE));
         return this;
     }
 
     public CustomWeatherProductPage selectWeatherParameter(Map<String, Boolean> parameters) {
         weatherParameterCbb.click();
         parameters.forEach((para, value) -> {
-            By checkBoxLocator = By.xpath("//div[@class='owm-check-box-group columns']" + PRE_LABEL + para + SUF_INPUT);
-            CheckBox weatherCkb = new CheckBox(pageDriver, checkBoxLocator);
+            WebElement weatherElement = weatherParameterCbb.
+                    findElement(By.xpath(PRE_LABEL + para + SUF_INPUT));
+            CheckBox weatherCkb = new CheckBox(pageDriver, weatherElement);
             weatherCkb.select(value);
         });
         weatherParaCloseBtn.click();
-
         return this;
     }
-
 
     public CustomWeatherProductPage selectUnit(String unit) {
         unitCbb.click();
@@ -241,18 +205,7 @@ public class CustomWeatherProductPage extends AbstractPage {
         return this;
     }
 
-    public CustomWeatherProductPage selectFileFormat(List<String> fileFormat) {
-        fileFormatCbb.click();
-        for (String format : fileFormat
-        ) {
-            CheckBox.select(fileFormatCkl, format);
-        }
-        fileFormatCloseBtn.click();
-
-        return this;
-    }
-
-    public CustomWeatherProductPage selectFileFormat(Map<String, Boolean> fileFormat) {
+     public CustomWeatherProductPage selectFileFormat(Map<String, Boolean> fileFormat) {
         fileFormatCbb.click();
         fileFormat.forEach((format, value) -> {
             WebElement checkbox = fileFormatCkl.findElement(By.xpath

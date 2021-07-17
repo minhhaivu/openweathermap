@@ -7,11 +7,12 @@ import lombok.Setter;
 @Setter
 @Getter
 @AllArgsConstructor
-public class HistoricalArchives extends Product {
+public class HistoricalArchives implements Product {
+    private String name;
     private String state;
     private String year;
-
-    public HistoricalArchives(String name) {
-        super(name);
-    }
+//
+//    public HistoricalArchives(String name) {
+//        this.name = name;
+//    }
 }

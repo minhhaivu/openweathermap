@@ -1,6 +1,5 @@
 package action;
 
-import objects.product.CustomWeatherOrderDetail;
 import objects.product.CustomWeatherProduct;
 import pages.CustomWeatherOrderDetailPage;
 import pages.CustomWeatherProductPage;
@@ -40,15 +39,14 @@ public class CustomWeatherProductsAction extends ActionBase {
         customWeatherProductPage.search(product.getLocation())
                 .selectFromDate(product.getFromDate())
                 .selectToDate(product.getToDate())
-                .unselectWeatherParameter(product.getUnselectedWeatherPara())
+                .selectWeatherParameter(product.getWeatherPara())
                 .selectUnit(product.getUnit())
                 .selectFileFormat(product.getFileFormat())
                 .selectDownLoadOption(product.getDownLoadOption())
                 .submitOrderPlace();
     }
 
-    public CustomWeatherOrderDetail getOrderDetailConfirmation() {
-
+    public CustomWeatherProduct getOrderDetailConfirmation() {
         return customWeatherOrderDetailPage.getOrderDetail();
     }
 

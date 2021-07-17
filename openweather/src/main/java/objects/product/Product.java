@@ -1,11 +1,8 @@
 package objects.product;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Product {
-    private String name;
-
+public interface Product {
 }

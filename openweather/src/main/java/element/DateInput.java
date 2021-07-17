@@ -47,7 +47,7 @@ public class DateInput {
     }
 
     public void selectDate(int date) {
-        By dateLocator = Locator.tdContainText(Integer.toString(date));
+        By dateLocator = By.xpath(".//td[contains(text(),'" + Integer.toString(date) + "')]");
         calendar.findElement(dateLocator).click();
     }
 
