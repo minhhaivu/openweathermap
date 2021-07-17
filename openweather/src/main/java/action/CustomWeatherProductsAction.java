@@ -23,8 +23,6 @@ public class CustomWeatherProductsAction extends ActionBase {
 
     public CustomWeatherProductsAction openMarketPlace() {
         marketPlacePage.open();
-        marketPlacePage.selectProductToOrder("History Bulk");
-
         return this;
     }
 

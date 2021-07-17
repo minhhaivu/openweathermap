@@ -2,7 +2,6 @@ package pages;
 
 
 import action.WaitForAction;
-import actor.Tester;
 import element.CheckBox;
 import element.DateInput;
 import element.Locator;
@@ -11,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import objects.product.CustomWeatherOrderDetail;
 import objects.product.OrderDetail;
 import objects.search.Coordinates;
 import objects.search.Import;
@@ -25,7 +23,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.Test;
 
 import java.util.*;
 
@@ -129,7 +126,7 @@ public class CustomWeatherProductPage extends AbstractPage {
         if (location instanceof Location) {
             inputSearchString((String) location.getInfo());
         } else if (location instanceof Coordinates) {
-            Map<String, String> coordinatesInfo = (HashMap<String, String>) location.getInfo();
+            Map<String, String> coordinatesInfo = (Map<String, String>) location.getInfo();
             inputSearchString(coordinatesInfo.get("LAT"), coordinatesInfo.get("LONG"));
         } else if (location instanceof Import) {
             importCSVFile((String) location.getInfo());
@@ -186,12 +183,13 @@ public class CustomWeatherProductPage extends AbstractPage {
 
     }
 
+
     public CustomWeatherProductPage selectFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
-
-        fromDateInput.click();
         calendar.setTime(date);
-        DateInput.selectDate(fromDateInput, calendar.get(Calendar.YEAR),
+        fromDateInput.click();
+        DateInput from = new DateInput(pageDriver,fromDateInput);
+        from.selectDate(calendar.get(Calendar.YEAR),
                 calendar.getDisplayName((Calendar.MONTH), Calendar.SHORT, Locale.getDefault()),
                 calendar.get(Calendar.DATE));
         return this;
@@ -199,11 +197,11 @@ public class CustomWeatherProductPage extends AbstractPage {
 
     public CustomWeatherProductPage selectToDate(Date date) {
         Calendar calendar = Calendar.getInstance();
-
-        toDateInput.click();
         calendar.setTime(date);
-        DateInput.selectYear(toDateInput, calendar.get(Calendar.YEAR));
-        DateInput.selectMonth(toDateInput, calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+        toDateInput.click();
+        DateInput to = new DateInput(pageDriver,toDateInput);
+        to.selectYear(calendar.get(Calendar.YEAR));
+        to.selectMonth(calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
         toDateInput.findElement(By.xpath("//div[@class='to date-input']//td[contains(text(),"
                 + Integer.toString(calendar.get(Calendar.DATE)) + ")]")).click();
 
@@ -222,7 +220,7 @@ public class CustomWeatherProductPage extends AbstractPage {
         return this;
     }
 
-    public CustomWeatherProductPage selectWeatherParameter(HashMap<String, Boolean> parameters) {
+    public CustomWeatherProductPage selectWeatherParameter(Map<String, Boolean> parameters) {
         weatherParameterCbb.click();
         parameters.forEach((para, value) -> {
             By checkBoxLocator = By.xpath("//div[@class='owm-check-box-group columns']" + PRE_LABEL + para + SUF_INPUT);
@@ -254,7 +252,7 @@ public class CustomWeatherProductPage extends AbstractPage {
         return this;
     }
 
-    public CustomWeatherProductPage selectFileFormat(HashMap<String, Boolean> fileFormat) {
+    public CustomWeatherProductPage selectFileFormat(Map<String, Boolean> fileFormat) {
         fileFormatCbb.click();
         fileFormat.forEach((format, value) -> {
             WebElement checkbox = fileFormatCkl.findElement(By.xpath
@@ -286,12 +284,13 @@ public class CustomWeatherProductPage extends AbstractPage {
     }
 
     public OrderDetail getOrderDetail() {
-        String periodTime = Table.getTableCellValueByRowName(orderDetailTbl, "From - To");
-        String noOfLocations = Table.getTableCellValueByRowName(orderDetailTbl, "Number of locations");
-        String weatherPara = Table.getTableCellValueByRowName(orderDetailTbl, "Weather parameters");
-        String fileFormat = Table.getTableCellValueByRowName(orderDetailTbl, "File formats");
-        String unit = Table.getTableCellValueByRowName(orderDetailTbl, "Units");
-        String downLoadOption = Table.getTableCellValueByRowName(orderDetailTbl, "Download");
+        Table orderTable = new Table(pageDriver,orderDetailTbl);
+        String periodTime = orderTable.getRowValue("From - To");
+        String noOfLocations = orderTable.getRowValue("Number of locations");
+        String weatherPara = orderTable.getRowValue("Weather parameters");
+        String fileFormat = orderTable.getRowValue("File formats");
+        String unit = orderTable.getRowValue("Units");
+        String downLoadOption = orderTable.getRowValue("Download");
 
         return new OrderDetail(periodTime, noOfLocations, weatherPara, fileFormat, unit, downLoadOption);
     }

@@ -26,8 +26,6 @@ public class DateInput {
         if (calendar.findElements(yearLocator).isEmpty()) {
             Table table = new Table(pageDriver, calendar);
             int minYear = Integer.parseInt(table.getTableCellValue(1, 1));
-            table.getTableRowCount();
-            table.getTableColumnCount();
             int maxYear = Integer.parseInt
                     (table.getTableCellValue(table.getTableRowCount(), table.getTableColumnCount()));
             while (year < minYear) {

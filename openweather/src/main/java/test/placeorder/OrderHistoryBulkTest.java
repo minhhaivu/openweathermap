@@ -34,13 +34,13 @@ public class OrderHistoryBulkTest extends TestBase {
     public void closeBrowser() {
 
         Tester tester = Tester.getInstance();
-        tester.customWeatherProductsAction.close();
+//        tester.customWeatherProductsAction.close();
     }
 
     private CustomWeatherProduct historyBulkProduct() {
         String city = "Fort Lauderdale FL, USA";
         Location location = new Location(city);
-        String fromDate = "13-Nov-2020";
+        String fromDate = "13-Nov-2000";
         String toDate = "21-Nov-2020";
         Date from = DateInput.stringToDate("dd-MMM-yyyy", fromDate);
         Date to = DateInput.stringToDate("dd-MMM-yyyy", toDate);
