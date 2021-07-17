@@ -28,12 +28,13 @@ public class CustomWeatherOrderDetailPage extends AbstractPage{
     }
 
     public CustomWeatherOrderDetail getOrderDetail() {
-        String periodTime = Table.getTableCellValueByRowName(orderDetailTbl, "From - To");
-        String noOfLocations = Table.getTableCellValueByRowName(orderDetailTbl, "Number of locations");
-        String weatherPara = Table.getTableCellValueByRowName(orderDetailTbl, "Weather parameters");
-        String fileFormat = Table.getTableCellValueByRowName(orderDetailTbl, "File formats");
-        String unit = Table.getTableCellValueByRowName(orderDetailTbl, "Units");
-        String downLoadOption = Table.getTableCellValueByRowName(orderDetailTbl, "Download");
+        Table orderTable = new Table(pageDriver,orderDetailTbl);
+        String periodTime = orderTable.getRowValue("From - To");
+        String noOfLocations = orderTable.getRowValue("Number of locations");
+        String weatherPara = orderTable.getRowValue("Weather parameters");
+        String fileFormat = orderTable.getRowValue("File formats");
+        String unit = orderTable.getRowValue("Units");
+        String downLoadOption = orderTable.getRowValue("Download");
 
         return new CustomWeatherOrderDetail (periodTime, noOfLocations, weatherPara, fileFormat, unit, downLoadOption);
     }
