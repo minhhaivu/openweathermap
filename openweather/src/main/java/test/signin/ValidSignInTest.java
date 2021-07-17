@@ -19,9 +19,7 @@ public class ValidSignInTest {
         String password = "N0rm@l22";
 
         tester.signInAction.signIn(userEmail, password);
-        SignInValidator.signInSucessfully();
-
-        tester.signInAction.close();
+        SignInValidator.signInSuccessfully();
     }
 
     @AfterClass
