@@ -2,10 +2,7 @@ package pages;
 
 
 import action.WaitForAction;
-import element.CheckBox;
-import element.DateInput;
-import element.Locator;
-import element.Table;
+import element.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +12,7 @@ import objects.search.Coordinates;
 import objects.search.Import;
 import objects.search.Location;
 import objects.search.LocationType;
+import org.apache.poi.ss.formula.functions.T;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -33,6 +31,7 @@ public class CustomWeatherProductPage extends AbstractPage {
     private static final long TIMEOUT_IN_SECONDS = 30;
     private static final String PRE_LABEL = "//label[contains(text(),'";
     private static final String SUF_SPAN = "')]//span";
+    private static final String SUF_INPUT = "')]/input";
 
     @FindBy(id = "gmap")
     private WebElement gmap;
@@ -125,7 +124,7 @@ public class CustomWeatherProductPage extends AbstractPage {
         if (location instanceof Location) {
             inputSearchString((String) location.getInfo());
         } else if (location instanceof Coordinates) {
-            Map<String, String> coordinatesInfo = (HashMap<String, String>) location.getInfo();
+            Map<String, String> coordinatesInfo = (Map<String, String>) location.getInfo();
             inputSearchString(coordinatesInfo.get("LAT"), coordinatesInfo.get("LONG"));
         } else if (location instanceof Import) {
             importCSVFile((String) location.getInfo());
@@ -138,56 +137,38 @@ public class CustomWeatherProductPage extends AbstractPage {
 
     private void inputSearchString(String location) {
         waitForPageLoaded();
-
-        searchTxt.click();
-        searchByPopUp.findElement(Locator.buttonContainText("By location")).click();
-
-        searchTxt.click();
-        searchTxt.sendKeys(location);
-        WaitForAction.sleep(5);
-        searchTxt.sendKeys(Keys.DOWN, Keys.RETURN);
-
-        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.visibilityOf(addLocationBtn));
-        addLocationBtn.click();
+        TextBox search = new TextBox(pageDriver,searchTxt,searchByPopUp);
+        search.selectPopUpOption("By location");
+        search.enter(location,3,Keys.DOWN + "," + Keys.RETURN);
+        Button addLocation = new Button(pageDriver,addLocationBtn);
+        addLocation.click();
     }
 
     private void inputSearchString(String latitude, String longitude) {
         waitForPageLoaded();
-
-        searchTxt.click();
-        searchByPopUp.findElement(Locator.buttonContainText("By coordinates")).click();
-
-        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.visibilityOf(searchCoordinatePanel));
-        latitudeTxt.click();
-        latitudeTxt.sendKeys(latitude);
-
-        longitudeTxt.click();
-        longitudeTxt.sendKeys(longitude);
-        longitudeTxt.sendKeys(Keys.RETURN);
-
-        new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS)
-                .until(ExpectedConditions.visibilityOf(addLocationBtn));
-        Actions action = new Actions(pageDriver);
-        action.doubleClick(addLocationBtn).perform();
+        TextBox search = new TextBox(pageDriver,searchTxt,searchByPopUp);
+        search.selectPopUpOption("By coordinates");
+        TextBox latTxt = new TextBox(pageDriver,latitudeTxt);
+        latTxt.enter(latitude);
+        TextBox longTxt = new TextBox(pageDriver,longitudeTxt);
+        longTxt.enter(longitude,Keys.RETURN);
+        Button addLocation = new Button(pageDriver,addLocationBtn);
+        addLocation.doubleClick();
     }
 
     private void importCSVFile(String filePath) {
-
-        searchTxt.click();
-        searchByPopUp.findElement(Locator.buttonContainText("Import")).click();
-
+        waitForPageLoaded();
+        TextBox search = new TextBox(pageDriver,searchTxt,searchByPopUp);
+        search.selectPopUpOption("Import");
         importCSVFileBtn.click();
-
     }
 
     public CustomWeatherProductPage selectFromDate(Date date) {
         Calendar calendar = Calendar.getInstance();
-
-        fromDateInput.click();
         calendar.setTime(date);
-        DateInput.selectDate(fromDateInput, calendar.get(Calendar.YEAR),
+        fromDateInput.click();
+        DateInput from = new DateInput(pageDriver,fromDateInput);
+        from.selectDate(calendar.get(Calendar.YEAR),
                 calendar.getDisplayName((Calendar.MONTH), Calendar.SHORT, Locale.getDefault()),
                 calendar.get(Calendar.DATE));
         return this;
@@ -195,26 +176,24 @@ public class CustomWeatherProductPage extends AbstractPage {
 
     public CustomWeatherProductPage selectToDate(Date date) {
         Calendar calendar = Calendar.getInstance();
-
-        toDateInput.click();
         calendar.setTime(date);
-        DateInput.selectYear(toDateInput, calendar.get(Calendar.YEAR));
-        DateInput.selectMonth(toDateInput, calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-        toDateInput.findElement(By.xpath("//div[@class='to date-input']//td[contains(text(),"
-                + Integer.toString(calendar.get(Calendar.DATE)) + ")]")).click();
-
+        toDateInput.click();
+        DateInput to = new DateInput(pageDriver,toDateInput);
+        to.selectDate(calendar.get(Calendar.YEAR),
+                calendar.getDisplayName((Calendar.MONTH), Calendar.SHORT, Locale.getDefault()),
+                calendar.get(Calendar.DATE));
         return this;
     }
 
-
-    public CustomWeatherProductPage unselectWeatherParameter(List<String> parameters) {
+    public CustomWeatherProductPage selectWeatherParameter(Map<String, Boolean> parameters) {
         weatherParameterCbb.click();
-        for (String para : parameters
-        ) {
-            CheckBox.unselect(weatherParameterCkl, para);
-        }
+        parameters.forEach((para, value) -> {
+            WebElement weatherElement = weatherParameterCbb.
+                    findElement(By.xpath(PRE_LABEL + para + SUF_INPUT));
+            CheckBox weatherCkb = new CheckBox(pageDriver, weatherElement);
+            weatherCkb.select(value);
+        });
         weatherParaCloseBtn.click();
-
         return this;
     }
 
@@ -226,19 +205,22 @@ public class CustomWeatherProductPage extends AbstractPage {
         return this;
     }
 
-    public CustomWeatherProductPage selectFileFormat(List<String> fileFormat) {
+     public CustomWeatherProductPage selectFileFormat(Map<String, Boolean> fileFormat) {
         fileFormatCbb.click();
-        for (String format : fileFormat
-        ) {
-            CheckBox.select(fileFormatCkl, format);
-        }
+        fileFormat.forEach((format, value) -> {
+            WebElement checkbox = fileFormatCkl.findElement(By.xpath
+                    (PRE_LABEL + format + SUF_INPUT));
+            CheckBox fileFormatCkb = new CheckBox(pageDriver, checkbox);
+            fileFormatCkb.select(value);
+        });
+
         fileFormatCloseBtn.click();
 
         return this;
     }
 
     public CustomWeatherProductPage selectDownLoadOption(String downLoadOption) {
-        if(downLoadOption!=null) {
+        if (downLoadOption != null) {
             downLoadOptionCbb.click();
             downLoadOptionCkl.findElement(By.xpath(PRE_LABEL + downLoadOption + SUF_SPAN)).click();
             downLoadOptionCloseBtn.click();
@@ -255,12 +237,13 @@ public class CustomWeatherProductPage extends AbstractPage {
     }
 
     public OrderDetail getOrderDetail() {
-        String periodTime = Table.getTableCellValueByRowName(orderDetailTbl, "From - To");
-        String noOfLocations = Table.getTableCellValueByRowName(orderDetailTbl, "Number of locations");
-        String weatherPara = Table.getTableCellValueByRowName(orderDetailTbl, "Weather parameters");
-        String fileFormat = Table.getTableCellValueByRowName(orderDetailTbl, "File formats");
-        String unit = Table.getTableCellValueByRowName(orderDetailTbl, "Units");
-        String downLoadOption = Table.getTableCellValueByRowName(orderDetailTbl, "Download");
+        Table orderTable = new Table(pageDriver,orderDetailTbl);
+        String periodTime = orderTable.getRowValue("From - To");
+        String noOfLocations = orderTable.getRowValue("Number of locations");
+        String weatherPara = orderTable.getRowValue("Weather parameters");
+        String fileFormat = orderTable.getRowValue("File formats");
+        String unit = orderTable.getRowValue("Units");
+        String downLoadOption = orderTable.getRowValue("Download");
 
         return new OrderDetail(periodTime, noOfLocations, weatherPara, fileFormat, unit, downLoadOption);
     }

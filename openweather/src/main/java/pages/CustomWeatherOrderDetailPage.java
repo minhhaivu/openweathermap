@@ -1,7 +1,7 @@
 package pages;
 
 import element.Table;
-import objects.product.CustomWeatherOrderDetail;
+import objects.product.CustomWeatherProduct;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,15 +27,22 @@ public class CustomWeatherOrderDetailPage extends AbstractPage{
         orderDetailCloseBtn.click();
     }
 
-    public CustomWeatherOrderDetail getOrderDetail() {
-        String periodTime = Table.getTableCellValueByRowName(orderDetailTbl, "From - To");
-        String noOfLocations = Table.getTableCellValueByRowName(orderDetailTbl, "Number of locations");
-        String weatherPara = Table.getTableCellValueByRowName(orderDetailTbl, "Weather parameters");
-        String fileFormat = Table.getTableCellValueByRowName(orderDetailTbl, "File formats");
-        String unit = Table.getTableCellValueByRowName(orderDetailTbl, "Units");
-        String downLoadOption = Table.getTableCellValueByRowName(orderDetailTbl, "Download");
-
-        return new CustomWeatherOrderDetail (periodTime, noOfLocations, weatherPara, fileFormat, unit, downLoadOption);
+    public CustomWeatherProduct getOrderDetail() {
+        Table orderTable = new Table(pageDriver,orderDetailTbl);
+        String periodTime = orderTable.getRowValue("From - To");
+        String noOfLocations = orderTable.getRowValue("Number of locations");
+        String weatherPara = orderTable.getRowValue("Weather parameters");
+        String fileFormat = orderTable.getRowValue("File formats");
+        String unit = orderTable.getRowValue("Units");
+        String downLoadOption = orderTable.getRowValue("Download");
+        return new CustomWeatherProduct().builder()
+                .datePeriod(periodTime)
+                .numberOfLocation(Integer.valueOf(noOfLocations))
+                .customWeatherPara(weatherPara)
+                .fileFormatInString(fileFormat)
+                .unit(unit)
+                .downLoadOption(downLoadOption)
+                .build();
     }
 
 

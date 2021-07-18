@@ -1,10 +1,11 @@
 package action;
 
-import objects.product.CustomWeatherOrderDetail;
 import objects.product.CustomWeatherProduct;
 import pages.CustomWeatherOrderDetailPage;
 import pages.CustomWeatherProductPage;
 import pages.MarketPlacePage;
+
+import java.util.HashMap;
 
 public class CustomWeatherProductsAction extends ActionBase {
     private final MarketPlacePage marketPlacePage;
@@ -21,8 +22,16 @@ public class CustomWeatherProductsAction extends ActionBase {
 
     public CustomWeatherProductsAction openMarketPlace() {
         marketPlacePage.open();
-
         return this;
+    }
+
+    public CustomWeatherProductsAction selectWeather(HashMap<String,Boolean> para) {
+        customWeatherProductPage.selectWeatherParameter(para);
+        return this;
+    }
+
+    public void selectFileFormat(HashMap<String,Boolean> fileFormat){
+        customWeatherProductPage.selectFileFormat(fileFormat);
     }
 
     public void orderCustomWeatherProduct(CustomWeatherProduct product) {
@@ -30,15 +39,14 @@ public class CustomWeatherProductsAction extends ActionBase {
         customWeatherProductPage.search(product.getLocation())
                 .selectFromDate(product.getFromDate())
                 .selectToDate(product.getToDate())
-                .unselectWeatherParameter(product.getUnselectedWeatherPara())
+                .selectWeatherParameter(product.getWeatherPara())
                 .selectUnit(product.getUnit())
                 .selectFileFormat(product.getFileFormat())
                 .selectDownLoadOption(product.getDownLoadOption())
                 .submitOrderPlace();
     }
 
-    public CustomWeatherOrderDetail getOrderDetailConfirmation() {
-
+    public CustomWeatherProduct getOrderDetailConfirmation() {
         return customWeatherOrderDetailPage.getOrderDetail();
     }
 

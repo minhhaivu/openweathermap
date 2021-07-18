@@ -8,9 +8,8 @@ import test.TestBase;
 public class OrderHistoricalWeatherDataByStateTest extends TestBase {
     @Test
     public void orderHistoricalWeather() {
-        HistoricalArchives weatherProduct = new HistoricalArchives("Historical Weather Data by State");
-        weatherProduct.setState("Texas");
-        weatherProduct.setYear("2018");
+        HistoricalArchives weatherProduct = new HistoricalArchives
+                ("Historical Weather Data by State","Texas","2018");
 
         Tester tester = Tester.getInstance();
 
@@ -18,6 +17,6 @@ public class OrderHistoricalWeatherDataByStateTest extends TestBase {
 
         PlaceOrderValidator.checkOrderDetailPageDisplay();
 
-//        tester.historicalDataArchivesAction.close();
+        tester.historicalDataArchivesAction.close();
     }
 }

@@ -29,7 +29,7 @@ public class MarketPlacePage extends AbstractPage {
     }
 
     public void selectProductToOrder(String product) {
-        marketPlace.findElement(By.xpath("//div[@class='market-place']//a[contains(text(),'"
+        marketPlace.findElement(By.xpath("//a[contains(text(),'"
                 + product + "')]")).click();
     }
 
