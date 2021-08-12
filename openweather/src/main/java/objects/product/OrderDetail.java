@@ -1,18 +1,16 @@
 package objects.product;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
 public class OrderDetail {
+    String periodTime;
+    int numberOfLocation;
+    String weatherPara;
+    String fileFormats;
+    String units;
+    String downLoadOption;
 
-    private String periodTime;
-    private String noOfLocations;
-    private String weatherPara;
-    private String fileFormat;
-    private String unit;
-    private String downLoadOption;
+
 
 }

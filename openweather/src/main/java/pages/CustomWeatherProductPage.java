@@ -3,23 +3,17 @@ package pages;
 
 import action.WaitForAction;
 import element.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import objects.product.OrderDetail;
+import lombok.*;
 import objects.search.Coordinates;
 import objects.search.Import;
 import objects.search.Location;
 import objects.search.LocationType;
-import org.apache.poi.ss.formula.functions.T;
+import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.*;
@@ -120,7 +114,7 @@ public class CustomWeatherProductPage extends AbstractPage {
         this.pageDriver = driver;
     }
 
-    public CustomWeatherProductPage search(LocationType location) {
+    public CustomWeatherProductPage search(@NonNull LocationType location) {
         if (location instanceof Location) {
             inputSearchString((String) location.getInfo());
         } else if (location instanceof Coordinates) {
@@ -131,11 +125,10 @@ public class CustomWeatherProductPage extends AbstractPage {
         } else {
             throw new UnsupportedOperationException();
         }
-
         return this;
     }
 
-    private void inputSearchString(String location) {
+    private void inputSearchString(@NonNull String location) {
         waitForPageLoaded();
         TextBox search = new TextBox(pageDriver,searchTxt,searchByPopUp);
         search.selectPopUpOption("By location");
@@ -164,40 +157,40 @@ public class CustomWeatherProductPage extends AbstractPage {
     }
 
     public CustomWeatherProductPage selectFromDate(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        fromDateInput.click();
-        DateInput from = new DateInput(pageDriver,fromDateInput);
-        from.selectDate(calendar.get(Calendar.YEAR),
-                calendar.getDisplayName((Calendar.MONTH), Calendar.SHORT, Locale.getDefault()),
-                calendar.get(Calendar.DATE));
+        selectDate(fromDateInput, date);
         return this;
     }
 
     public CustomWeatherProductPage selectToDate(Date date) {
+        selectDate(toDateInput, date);
+        return this;
+    }
+
+    private void selectDate(@NonNull WebElement element, @NonNull Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        toDateInput.click();
-        DateInput to = new DateInput(pageDriver,toDateInput);
+        element.click();
+        DateInput to = new DateInput(pageDriver,element);
         to.selectDate(calendar.get(Calendar.YEAR),
                 calendar.getDisplayName((Calendar.MONTH), Calendar.SHORT, Locale.getDefault()),
                 calendar.get(Calendar.DATE));
-        return this;
     }
 
-    public CustomWeatherProductPage selectWeatherParameter(Map<String, Boolean> parameters) {
-        weatherParameterCbb.click();
-        parameters.forEach((para, value) -> {
-            WebElement weatherElement = weatherParameterCbb.
-                    findElement(By.xpath(PRE_LABEL + para + SUF_INPUT));
-            CheckBox weatherCkb = new CheckBox(pageDriver, weatherElement);
-            weatherCkb.select(value);
-        });
-        weatherParaCloseBtn.click();
-        return this;
+    public CustomWeatherProductPage selectWeatherParameter(@Nullable Map<String, Boolean> parameters) {
+        if(parameters !=null) {
+            weatherParameterCbb.click();
+            parameters.forEach((para, value) -> {
+                WebElement weatherElement = weatherParameterCbb.
+                        findElement(By.xpath(PRE_LABEL + para + SUF_INPUT));
+                CheckBox weatherCkb = new CheckBox(pageDriver, weatherElement);
+                weatherCkb.select(value);
+            });
+            weatherParaCloseBtn.click();
+        }
+            return this;
     }
 
-    public CustomWeatherProductPage selectUnit(String unit) {
+    public CustomWeatherProductPage selectUnit(@NonNull String unit) {
         unitCbb.click();
         unitCkl.findElement(By.xpath(PRE_LABEL + unit + SUF_SPAN)).click();
         unitCloseBtn.click();
@@ -206,16 +199,17 @@ public class CustomWeatherProductPage extends AbstractPage {
     }
 
      public CustomWeatherProductPage selectFileFormat(Map<String, Boolean> fileFormat) {
-        fileFormatCbb.click();
-        fileFormat.forEach((format, value) -> {
-            WebElement checkbox = fileFormatCkl.findElement(By.xpath
-                    (PRE_LABEL + format + SUF_INPUT));
-            CheckBox fileFormatCkb = new CheckBox(pageDriver, checkbox);
-            fileFormatCkb.select(value);
-        });
+        if (fileFormat !=null) {
+            fileFormatCbb.click();
+            fileFormat.forEach((format, value) -> {
+                WebElement checkbox = fileFormatCkl.findElement(By.xpath
+                        (PRE_LABEL + format + SUF_INPUT));
+                CheckBox fileFormatCkb = new CheckBox(pageDriver, checkbox);
+                fileFormatCkb.select(value);
+            });
 
-        fileFormatCloseBtn.click();
-
+            fileFormatCloseBtn.click();
+        }
         return this;
     }
 
@@ -236,19 +230,7 @@ public class CustomWeatherProductPage extends AbstractPage {
         orderDetailCloseBtn.click();
     }
 
-    public OrderDetail getOrderDetail() {
-        Table orderTable = new Table(pageDriver,orderDetailTbl);
-        String periodTime = orderTable.getRowValue("From - To");
-        String noOfLocations = orderTable.getRowValue("Number of locations");
-        String weatherPara = orderTable.getRowValue("Weather parameters");
-        String fileFormat = orderTable.getRowValue("File formats");
-        String unit = orderTable.getRowValue("Units");
-        String downLoadOption = orderTable.getRowValue("Download");
-
-        return new OrderDetail(periodTime, noOfLocations, weatherPara, fileFormat, unit, downLoadOption);
-    }
-
-    private void waitForPageLoaded() {
+     private void waitForPageLoaded() {
         new WebDriverWait(pageDriver, TIMEOUT_IN_SECONDS).
                 until(WaitForAction.isElementPresent(By.id("gmap")));
     }

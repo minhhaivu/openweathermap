@@ -16,7 +16,7 @@ import backup.data.DriverType;
 import pages.FindWeatherPage;
 import backup.data.Constant;
 
-public class SearchCurrentWeather {
+public class SearchCurrentWeatherPara {
     DriverManager driverManager;
     WebDriver driver;
     String invalidCityFilePath = "src/main/java/backup.data/SearchWeather.xlsx";

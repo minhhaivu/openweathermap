@@ -5,15 +5,12 @@ import pages.CustomWeatherOrderDetailPage;
 import pages.CustomWeatherProductPage;
 import pages.MarketPlacePage;
 
-import java.util.HashMap;
-
 public class CustomWeatherProductsAction extends ActionBase {
     private final MarketPlacePage marketPlacePage;
     private final CustomWeatherProductPage customWeatherProductPage;
     private final CustomWeatherOrderDetailPage customWeatherOrderDetailPage;
 
     public CustomWeatherProductsAction() {
-
         super();
         marketPlacePage = getPageInstance(MarketPlacePage.class);
         customWeatherProductPage = getPageInstance(CustomWeatherProductPage.class);
@@ -23,15 +20,6 @@ public class CustomWeatherProductsAction extends ActionBase {
     public CustomWeatherProductsAction openMarketPlace() {
         marketPlacePage.open();
         return this;
-    }
-
-    public CustomWeatherProductsAction selectWeather(HashMap<String,Boolean> para) {
-        customWeatherProductPage.selectWeatherParameter(para);
-        return this;
-    }
-
-    public void selectFileFormat(HashMap<String,Boolean> fileFormat){
-        customWeatherProductPage.selectFileFormat(fileFormat);
     }
 
     public void orderCustomWeatherProduct(CustomWeatherProduct product) {
@@ -46,8 +34,12 @@ public class CustomWeatherProductsAction extends ActionBase {
                 .submitOrderPlace();
     }
 
-    public CustomWeatherProduct getOrderDetailConfirmation() {
-        return customWeatherOrderDetailPage.getOrderDetail();
+    public CustomWeatherProduct getHistoryBulkOrderDetailConfirmation() {
+        return new CustomWeatherProduct().historyBulkParse(customWeatherOrderDetailPage.getOrderDetail());
+    }
+
+    public CustomWeatherProduct getHistoryForecastBulkOrderDetailConfirmation() {
+        return new CustomWeatherProduct().historyForecastBulkParse(customWeatherOrderDetailPage.getOrderDetail());
     }
 
     public void closeOrderDetails() {

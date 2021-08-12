@@ -37,7 +37,7 @@ import backup.data.Constant;
  *
  */
 @Listeners(backup.utilities.ListenerReport.class)
-public class SearchForecastWeather {
+public class SearchForecastWeatherPara {
     DriverManager driverManager;
     WebDriver driver;
 

@@ -5,7 +5,7 @@ import objects.product.HistoricalArchives;
 import org.testng.annotations.Test;
 import test.TestBase;
 
-public class OrderHistoricalWeatherDataByStateTest extends TestBase {
+public class OrderHistoricalWeatherParaDataByStateTest extends TestBase {
     @Test
     public void orderHistoricalWeather() {
         HistoricalArchives weatherProduct = new HistoricalArchives
